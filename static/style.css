@@ -1,0 +1,9 @@
+body { font-family: Arial, sans-serif; background:#111; color:#eee; margin:0; padding:0; }
+header { background:#1a73e8; padding:20px; text-align:center; }
+header h1 { margin:0 0 10px; }
+header input { padding:10px; width:300px; border-radius:5px; border:none; }
+header button { padding:10px 15px; border:none; border-radius:5px; background:#ffcc00; cursor:pointer; }
+.movies-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; padding:20px; }
+.movie-card { background:#222; padding:15px; border-radius:10px; }
+.movie-card img { width:100%; border-radius:10px; }
+.movie-card a { display:inline-block; margin-top:10px; color:#1a73e8; text-decoration:none; }

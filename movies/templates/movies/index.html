@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Jessna CineHub</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>🎬 Jessna CineHub</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="query" placeholder="Rechercher un film ou série..." value="{{ query }}">
+            <button type="submit">Rechercher</button>
+        </form>
+    </header>
+
+    <main>
+        {% if movies %}
+            <div class="movies-grid">
+                {% for movie in movies %}
+                <div class="movie-card">
+                    {% if movie.poster_url %}
+                    <img src="{{ movie.poster_url }}" alt="{{ movie.title }}">
+                    {% endif %}
+                    <h2>{{ movie.title }}</h2>
+                    <p><strong>Date :</strong> {{ movie.release_date }}</p>
+                    <p>{{ movie.overview }}</p>
+                    <a href="{{ movie.youtube_trailer }}" target="_blank">🎥 Voir bande-annonce</a>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </main>
+</body>
+</html>
