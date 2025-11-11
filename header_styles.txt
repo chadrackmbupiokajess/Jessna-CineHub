@@ -1,0 +1,87 @@
+Couleurs et CSS de l'en-tête animé
+
+Voici le détail du code CSS utilisé pour créer l'effet de l'en-tête avec le dégradé et les bulles flottantes, basé sur votre analyse.
+
+---
+1. Couleurs utilisées
+---
+
+- Dégradé (en diagonale, de haut à gauche vers bas à droite) :
+  - Couleur de départ : #667eea (un bleu-violet clair)
+  - Couleur de fin : #764ba2 (un violet plus foncé)
+
+- Superposition d'assombrissement : rgba(0, 0, 0, 0.2) (noir avec 20% d'opacité)
+
+- Bulles flottantes : rgba(255, 255, 255, 0.1) (blanc avec 10% d'opacité pour un effet "verre")
+
+---
+2. Code CSS complet
+---
+
+/*
+ * Ce code se trouve dans le fichier : static/style.css
+ */
+
+/* --- Header Section --- */
+header {
+    padding: 2rem 1rem;
+    text-align: center;
+    position: relative; /* Nécessaire pour positionner les enfants (bulles, superposition) */
+    overflow: hidden; /* Empêche les bulles de déborder */
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+/* Superposition sombre pour améliorer la lisibilité du texte */
+header::before {
+    content: '';
+    position: absolute;
+    inset: 0; /* Raccourci pour top:0, right:0, bottom:0, left:0 */
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 1; /* Se place entre le fond et le contenu */
+}
+
+/* Conteneur pour le titre et le formulaire, pour le positionnement au-dessus */
+.header-content {
+    position: relative;
+    z-index: 2; /* Se place au-dessus de la superposition */
+}
+
+/* Style de base pour les bulles décoratives */
+.decorative-bubble {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%; /* Transforme le div en cercle parfait */
+    z-index: 2; /* Se place aussi au-dessus de la superposition */
+    animation: float 6s ease-in-out infinite;
+}
+
+/* Style spécifique pour la première bulle */
+.bubble-1 {
+    width: 5rem;    /* 80px */
+    height: 5rem;   /* 80px */
+    top: 5rem;      /* 80px du haut */
+    left: 2.5rem;   /* 40px de la gauche */
+}
+
+/* Style spécifique pour la deuxième bulle */
+.bubble-2 {
+    width: 8rem;    /* 128px */
+    height: 8rem;   /* 128px */
+    bottom: 5rem;   /* 80px du bas */
+    right: 2.5rem;  /* 40px de la droite */
+    animation-delay: 1s; /* Retarde le début de son animation pour un effet décalé */
+}
+
+/* Animation de flottement qui fait monter et descendre les éléments */
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-20px); /* Monte de 20px */
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}

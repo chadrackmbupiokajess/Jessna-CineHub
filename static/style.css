@@ -22,13 +22,68 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+/* --- Header Section --- */
 header {
-    background: linear-gradient(to right, #2c3e50, #4ca1af);
     padding: 2rem 1rem;
     text-align: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    border-bottom: 4px solid var(--accent-color);
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
 }
+
+/* Dark overlay */
+header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+/* Container for title and form */
+.header-content {
+    position: relative;
+    z-index: 2;
+}
+
+/* Decorative bubbles */
+.decorative-bubble {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%; /* rounded-full */
+    z-index: 2;
+    animation: float 6s ease-in-out infinite;
+}
+
+.bubble-1 {
+    width: 5rem; /* w-20 */
+    height: 5rem; /* h-20 */
+    top: 5rem; /* top-20 */
+    left: 2.5rem; /* left-10 */
+}
+
+.bubble-2 {
+    width: 8rem; /* w-32 */
+    height: 8rem; /* h-32 */
+    bottom: 5rem; /* bottom-20 */
+    right: 2.5rem; /* right-10 */
+    animation-delay: 1s;
+}
+
+/* Floating animation */
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
 
 header h1 {
     margin: 0;
@@ -49,20 +104,20 @@ header input {
     width: clamp(250px, 50vw, 500px);
     border-radius: var(--border-radius);
     border: 2px solid transparent;
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.2); /* Slightly more visible on new background */
     color: var(--primary-text-color);
     font-size: 1rem;
     transition: all 0.3s ease;
 }
 
 header input::placeholder {
-    color: var(--secondary-text-color);
+    color: rgba(255, 255, 255, 0.7);
 }
 
 header input:focus {
     outline: none;
     border-color: var(--accent-color);
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.3);
 }
 
 header button {
