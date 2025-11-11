@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>À propos - Jessna CinéHub</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+<header>
+    <!-- Éléments décoratifs pour l'animation -->
+    <div class="decorative-bubble bubble-1"></div>
+    <div class="decorative-bubble bubble-2"></div>
+
+    <div class="header-content">
+        <nav class="main-nav"> {# Ajout de la classe main-nav #}
+            <a href="{% url 'index' %}" class="nav-link">Accueil</a>
+            <a href="{% url 'about' %}" class="nav-link active">À propos</a>
+        </nav>
+        <h1>Jessna CinéHub</h1>
+    </div>
+</header>
+
+<main class="about-page-content">
+    <section class="about-section">
+        <h2>À propos de Jessna CinéHub</h2>
+        <p>Bienvenue sur Jessna CinéHub, votre destination ultime pour explorer le monde fascinant du cinéma et des séries télévisées. Notre plateforme est conçue pour les cinéphiles et les curieux, offrant un accès facile à une vaste collection de films et de séries, des classiques intemporels aux dernières nouveautés.</p>
+        <p>Nous vous fournissons des informations riches et à jour : résumés détaillés, dates de sortie, affiches, et bien sûr, des bandes-annonces pour vous donner un aperçu avant de plonger dans l'action.</p>
+    </section>
+
+    <section class="about-section">
+        <h3>Notre Histoire</h3>
+        <p>Jessna TechLearn est née d'une vision simple mais ambitieuse : rendre l'éducation technologique accessible à tous, partout en République Démocratique du Congo et au-delà.</p>
+        <p>Fondée par Chadrack Mbu Jess, notre plateforme s'appuie sur des années d'expérience dans le domaine de la formation et du développement technologique.</p>
+        <p>Nous croyons fermement que l'éducation est la clé du développement personnel et professionnel. C'est pourquoi nous nous efforçons de créer des expériences d'apprentissage innovantes, interactives et adaptées aux réalités locales.</p>
+    </section>
+
+    <section class="about-section">
+        <h3>Notre Mission</h3>
+        <p>Notre mission est de rendre la découverte de films et de séries aussi agréable et intuitive que possible. Que vous cherchiez votre prochain coup de cœur ou que vous souhaitiez simplement vous tenir informé des tendances, Jessna CinéHub est là pour vous guider.</p>
+    </section>
+
+    <section class="about-section">
+        <h3>Contact</h3>
+        <p>Pour toute question, suggestion ou partenariat, n'hésitez pas à nous contacter à <a href="mailto:contact@jessnacinehub.com">contact@jessnacinehub.com</a>.</p>
+        <p>Suivez-nous sur les réseaux sociaux pour les dernières mises à jour !</p>
+    </section>
+
+    <section class="about-section">
+        <h3>Représentant légal</h3>
+        <p><strong>Chadrack Mbu Jess</strong></p>
+        <p>Fonction : Fondateur & Directeur Général</p>
+        <p>En qualité de représentant légal de Jessna TechLearn.</p>
+    </section>
+</main>
+
+<script src="{% static 'script.js' %}"></script>
+</body>
+</html>

@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- Element Selectors ---
-    const moviesGrid = document.querySelector('.movies-grid');
+    const moviesGrid = document.getElementById('movies-grid');
+    const infiniteScrollLoader = document.getElementById('infinite-scroll-loader');
     
     // Movie Details Overlay
     const movieOverlay = document.getElementById('movie-overlay');
-    const closeMovieOverlayBtn = movieOverlay.querySelector('.close-overlay');
     const overlayTitle = document.getElementById('overlay-title');
     const overlayOverview = document.getElementById('overlay-overview');
     const overlayPoster = document.getElementById('overlay-poster');
@@ -12,15 +12,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Trailer Video Overlay
     const trailerOverlay = document.getElementById('trailer-overlay');
-    const closeTrailerOverlayBtn = trailerOverlay.querySelector('.close-overlay');
     const trailerIframe = document.getElementById('trailer-iframe');
     const youtubeFallbackLink = document.getElementById('youtube-fallback-link');
 
     // --- Data Storage ---
-    // Read all movie data from the json_script tag
     const moviesDataElement = document.getElementById('movies-data');
-    const allMovies = moviesDataElement ? JSON.parse(moviesDataElement.textContent) : [];
+    let allMovies = moviesDataElement ? JSON.parse(moviesDataElement.textContent) : [];
     let currentTrailerUrls = null;
+    
+    // --- Infinite Scroll State ---
+    let currentPage = window.paginationData.currentPage;
+    const totalPages = window.paginationData.totalPages;
+    const query = window.paginationData.query;
+    let isLoading = false;
 
     // --- Event Listeners ---
 
@@ -29,9 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (card) {
             const movieId = parseInt(card.dataset.id);
             const movie = allMovies.find(m => m.id === movieId);
-            if (movie) {
-                openMovieOverlay(movie);
-            }
+            if (movie) openMovieOverlay(movie);
         }
     });
 
@@ -42,11 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.addEventListener('click', (event) => {
         if (event.target.matches('.close-overlay') || event.target.matches('.quit-btn')) {
             const modalToClose = event.target.dataset.close;
-            if (modalToClose === 'movie-overlay') {
-                closeMovieOverlay();
-            } else if (modalToClose === 'trailer-overlay') {
-                closeTrailerOverlay();
-            }
+            if (modalToClose === 'movie-overlay') closeMovieOverlay();
+            else if (modalToClose === 'trailer-overlay') closeTrailerOverlay();
         }
     });
 
@@ -65,7 +64,49 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Infinite Scroll Listener
+    window.addEventListener('scroll', () => {
+        // Check if we should load more movies
+        if (isLoading || currentPage >= totalPages) return;
+
+        const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+        if (scrollTop + clientHeight >= scrollHeight - 100) { // 100px buffer
+            loadMoreMovies();
+        }
+    });
+
     // --- Functions ---
+
+    async function loadMoreMovies() {
+        isLoading = true;
+        infiniteScrollLoader.style.display = 'flex';
+        
+        const nextPage = currentPage + 1;
+        const url = `/load-more-movies/?page=${nextPage}&query=${encodeURIComponent(query)}`;
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error('Network response was not ok');
+            const data = await response.json();
+
+            if (data.movies_html) {
+                moviesGrid.insertAdjacentHTML('beforeend', data.movies_html);
+                allMovies = allMovies.concat(data.new_movies_data); // Add new movies to our data store
+                currentPage = nextPage;
+            }
+
+            if (!data.has_next) {
+                currentPage = totalPages; // No more pages to load
+            }
+
+        } catch (error) {
+            console.error('Failed to load more movies:', error);
+            // Optionally, show an error message to the user
+        } finally {
+            isLoading = false;
+            infiniteScrollLoader.style.display = 'none';
+        }
+    }
 
     async function openMovieOverlay(movie) {
         overlayTitle.textContent = movie.title;
@@ -77,11 +118,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         overlayTrailerBtn.textContent = 'Chargement...';
         overlayTrailerBtn.disabled = true;
+        overlayTrailerBtn.classList.add('is-loading');
         currentTrailerUrls = null;
 
         try {
             const response = await fetch(`/trailer/${movie.id}/`);
-            if (!response.ok) throw new Error('Network response was not ok');
+            if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
             const data = await response.json();
 
             if (data.embed_url && data.watch_url) {
@@ -94,6 +136,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Failed to fetch trailer:', error);
             overlayTrailerBtn.textContent = 'Erreur de chargement';
+        } finally {
+            overlayTrailerBtn.classList.remove('is-loading');
         }
     }
 
@@ -102,6 +146,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (trailerOverlay.style.display !== 'flex') {
             document.body.style.overflow = 'auto';
         }
+        overlayTrailerBtn.textContent = '🎬 Voir la bande-annonce';
+        overlayTrailerBtn.disabled = false;
+        overlayTrailerBtn.classList.remove('is-loading');
     }
 
     function openTrailerOverlay(urls) {
@@ -118,6 +165,8 @@ document.addEventListener('DOMContentLoaded', () => {
         trailerOverlay.style.display = 'flex';
         movieOverlay.style.display = 'none';
     }
+
+
 
     function closeTrailerOverlay() {
         trailerIframe.src = "";

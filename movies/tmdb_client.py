@@ -32,26 +32,30 @@ def _format_movie_data(movie):
         "poster_url": f"https://image.tmdb.org/t/p/w500{movie['poster_path']}" if movie.get("poster_path") else "",
     }
 
-def get_popular_movies():
-    """Fetches a list of popular movies from TMDb."""
-    url = f"{BASE_URL}/movie/popular?api_key={API_KEY}&language=fr-FR&page=1"
+def get_popular_movies(page=1):
+    """Fetches a list of popular movies from TMDb for a given page."""
+    url = f"{BASE_URL}/movie/popular?api_key={API_KEY}&language=fr-FR&page={page}"
     try:
         response = requests.get(url)
         response.raise_for_status()
-        movies_data = response.json().get("results", [])
-        return [_format_movie_data(movie) for movie in movies_data]
+        data = response.json()
+        movies_data = data.get("results", [])
+        total_pages = data.get("total_pages", 1)
+        return [_format_movie_data(movie) for movie in movies_data], total_pages
     except requests.RequestException as e:
-        print(f"Error fetching popular movies: {e}")
-        return []
+        print(f"Error fetching popular movies (page {page}): {e}")
+        return [], 1
 
-def search_movies(query):
-    """Searches for movies by query on TMDb."""
-    url = f"{BASE_URL}/search/movie?api_key={API_KEY}&query={query}&language=fr-FR"
+def search_movies(query, page=1):
+    """Searches for movies by query on TMDb for a given page."""
+    url = f"{BASE_URL}/search/movie?api_key={API_KEY}&query={query}&language=fr-FR&page={page}"
     try:
         response = requests.get(url)
         response.raise_for_status()
-        movies_data = response.json().get("results", [])
-        return [_format_movie_data(movie) for movie in movies_data]
+        data = response.json()
+        movies_data = data.get("results", [])
+        total_pages = data.get("total_pages", 1)
+        return [_format_movie_data(movie) for movie in movies_data], total_pages
     except requests.RequestException as e:
-        print(f"Error searching movies: {e}")
-        return []
+        print(f"Error searching movies (query: {query}, page {page}): {e}")
+        return [], 1

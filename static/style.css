@@ -26,8 +26,8 @@ body {
 header {
     padding: 2rem 1rem;
     text-align: center;
-    position: relative;
-    overflow: hidden;
+    position: relative; /* Nécessaire pour positionner les enfants (bulles, superposition) */
+    overflow: hidden; /* Empêche les bulles de déborder */
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
 }
@@ -36,39 +36,42 @@ header {
 header::before {
     content: '';
     position: absolute;
-    inset: 0;
+    inset: 0; /* Raccourci pour top:0, right:0, bottom:0, left:0 */
     background-color: rgba(0, 0, 0, 0.2);
-    z-index: 1;
+    z-index: 1; /* Se place entre le fond et le contenu */
 }
 
 /* Container for title and form */
 .header-content {
     position: relative;
-    z-index: 2;
+    z-index: 2; /* Se place au-dessus de la superposition */
+    display: flex; /* Utilisation de Flexbox */
+    flex-direction: column; /* Empile les éléments verticalement */
+    align-items: center; /* Centre horizontalement */
 }
 
 /* Decorative bubbles */
 .decorative-bubble {
     position: absolute;
     background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 50%; /* rounded-full */
-    z-index: 2;
+    border-radius: 50%; /* Transforme le div en cercle parfait */
+    z-index: 2; /* Se place aussi au-dessus de la superposition */
     animation: float 6s ease-in-out infinite;
 }
 
 .bubble-1 {
-    width: 5rem; /* w-20 */
-    height: 5rem; /* h-20 */
-    top: 5rem; /* top-20 */
-    left: 2.5rem; /* left-10 */
+    width: 5rem;    /* 80px */
+    height: 5rem;   /* 80px */
+    top: 5rem;      /* 80px du haut */
+    left: 2.5rem;   /* 40px de la gauche */
 }
 
 .bubble-2 {
-    width: 8rem; /* w-32 */
-    height: 8rem; /* h-32 */
-    bottom: 5rem; /* bottom-20 */
-    right: 2.5rem; /* right-10 */
-    animation-delay: 1s;
+    width: 8rem;    /* 128px */
+    height: 8rem;   /* 128px */
+    bottom: 5rem;   /* 80px du bas */
+    right: 2.5rem;  /* 40px de la droite */
+    animation-delay: 1s; /* Retarde le début de son animation pour un effet décalé */
 }
 
 /* Floating animation */
@@ -77,7 +80,7 @@ header::before {
         transform: translateY(0px);
     }
     50% {
-        transform: translateY(-20px);
+        transform: translateY(-20px); /* Monte de 20px */
     }
     100% {
         transform: translateY(0px);
@@ -86,11 +89,53 @@ header::before {
 
 
 header h1 {
-    margin: 0;
+    margin: 1.5rem 0 1rem; /* Ajustement des marges pour le titre */
     font-size: 3rem;
     font-weight: 700;
     letter-spacing: 1px;
 }
+
+/* Navigation styles */
+.main-nav {
+    margin-bottom: 1rem; /* Espace sous la navigation */
+    background-color: rgba(0, 0, 0, 0.3); /* Fond semi-transparent pour la nav */
+    padding: 0.5rem 1.5rem;
+    border-radius: var(--border-radius);
+    display: flex; /* Pour aligner les liens */
+    gap: 1.5rem; /* Espace entre les liens */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 0.5rem 0;
+    transition: color 0.3s ease, transform 0.2s ease;
+    position: relative;
+}
+
+.nav-link:hover {
+    color: white;
+    transform: translateY(-2px);
+}
+
+.nav-link.active {
+    color: white;
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -5px; /* Positionne la barre sous le texte */
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--accent-color);
+    border-radius: 2px;
+}
+
 
 header form {
     margin-top: 1.5rem;
@@ -209,6 +254,8 @@ header button:hover {
     text-decoration: none;
     transition: background-color 0.3s ease, transform 0.2s ease;
     cursor: pointer;
+    position: relative; /* Needed for spinner positioning */
+    overflow: hidden; /* Hide spinner overflow */
 }
 
 .trailer-btn:hover {
@@ -221,6 +268,36 @@ header button:hover {
     cursor: not-allowed;
     transform: none;
 }
+
+/* Loading state for trailer button */
+.trailer-btn.is-loading {
+    background-color: #555; /* Darker background */
+    color: transparent; /* Hide text */
+    cursor: wait;
+    pointer-events: none; /* Prevent clicks */
+}
+
+.trailer-btn.is-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-top: -0.6rem;
+    margin-left: -0.6rem;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: var(--primary-text-color);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 
 /* --- Overlay Styles --- */
 .overlay {
@@ -365,6 +442,71 @@ header button:hover {
     text-shadow: 0 0 10px black;
 }
 
+/* --- About Page Styles --- */
+.about-page-content {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+    line-height: 1.6;
+}
+
+.about-section {
+    background-color: var(--secondary-bg-color);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.about-section h2, .about-section h3 {
+    color: var(--accent-color);
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.about-section ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.about-section ul li {
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.about-section ul li::before {
+    content: '•';
+    color: var(--accent-color);
+    position: absolute;
+    left: 0;
+}
+
+.about-section a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+.about-section a:hover {
+    text-decoration: underline;
+}
+
+/* --- Infinite Scroll Loader --- */
+.loader-container {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.loader-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top-color: var(--accent-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
 
 @media (max-width: 768px) {
     header {
@@ -372,6 +514,7 @@ header button:hover {
     }
     header h1 {
         font-size: 2.2rem;
+        margin-top: 1rem; /* Ajustement pour mobile */
     }
     .overlay-content {
         flex-direction: column;
@@ -393,5 +536,16 @@ header button:hover {
     }
     .video-container {
         width: 95vw;
+    }
+    .main-nav {
+        flex-direction: column; /* Empile les liens sur mobile */
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+    }
+    .nav-link {
+        font-size: 1rem;
+    }
+    .about-page-content {
+        padding: 0 1rem;
     }
 }

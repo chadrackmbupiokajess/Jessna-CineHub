@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jessna CineHub</title>
+    <title>Jessna CinéHub</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
@@ -15,7 +15,11 @@
     <div class="decorative-bubble bubble-2"></div>
 
     <div class="header-content">
-        <h1>Jessna CineHub</h1>
+        <nav class="main-nav"> {# Ajout de la classe main-nav #}
+            <a href="{% url 'index' %}" class="nav-link active">Accueil</a>
+            <a href="{% url 'about' %}" class="nav-link">À propos</a>
+        </nav>
+        <h1>Jessna CinéHub</h1>
         <form method="get" action="{% url 'index' %}">
             <input type="text" name="query" placeholder="Rechercher un film..." value="{{ query }}">
             <button type="submit">Rechercher</button>
@@ -28,28 +32,16 @@
         <h2 class="search-title">Résultats pour "{{ query }}"</h2>
     {% endif %}
 
-    <div class="movies-grid">
-        {% for movie in movies %}
-            {# On ne garde que l'ID du film dans l'attribut data. #}
-            <div class="movie-card" data-id="{{ movie.id }}">
-                
-                <img src="{{ movie.poster_url }}" alt="Affiche de {{ movie.title }}">
-                <div class="movie-card-content">
-                    <h2>{{ movie.title }}</h2>
-                    <p>Sortie : {{ movie.release_date }}</p>
-                    <p class="short-overview">{{ movie.overview|truncatechars:100 }}</p>
-                </div>
-            </div>
-        {% empty %}
-            <p style="text-align:center; color:var(--accent-color); grid-column: 1 / -1;">
-                {% if query %}
-                    Aucun film trouvé pour "{{ query }}". Essayez une autre recherche.
-                {% else %}
-                    Impossible de charger les films populaires pour le moment.
-                {% endif %}
-            </p>
-        {% endfor %}
+    <div class="movies-grid" id="movies-grid">
+        {# Le contenu initial est maintenant chargé via un template partiel #}
+        {% include "movies/partials/movie_cards.html" with movies=movies %}
     </div>
+
+    {# Conteneur pour le spinner de chargement du défilement infini #}
+    <div id="infinite-scroll-loader" class="loader-container" style="display: none;">
+        <div class="loader-spinner"></div>
+    </div>
+
 </main>
 
 <!-- Movie Details Overlay -->
@@ -89,8 +81,17 @@
     </div>
 </div>
 
-{# On passe toutes les données des films au JavaScript de manière propre et sécurisée. #}
+{# On passe les données des films au JavaScript de manière propre et sécurisée. #}
 {{ movies|json_script:"movies-data" }}
+
+{# On passe aussi les informations de pagination au JavaScript #}
+<script>
+    window.paginationData = {
+        currentPage: {{ current_page }},
+        totalPages: {{ total_pages }},
+        query: "{{ query|escapejs }}"
+    };
+</script>
 
 <script src="{% static 'script.js' %}"></script>
 </body>
