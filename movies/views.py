@@ -22,8 +22,8 @@ def index(request):
 
 def get_trailer(request, movie_id):
     """
-    API endpoint to fetch a movie's trailer URL.
-    Returns a JSON response with the trailer URL.
+    API endpoint to fetch a movie's trailer URLs.
+    Returns a JSON response with both embed and watch URLs.
     """
-    trailer_url = tmdb_client.get_trailer_url(movie_id)
-    return JsonResponse({"trailer_url": trailer_url})
+    trailer_urls = tmdb_client.get_trailer_urls(movie_id)
+    return JsonResponse(trailer_urls or {})

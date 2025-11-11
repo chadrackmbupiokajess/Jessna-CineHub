@@ -1,77 +1,119 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Element Selectors ---
+    const moviesGrid = document.querySelector('.movies-grid');
+    
+    // Movie Details Overlay
     const movieOverlay = document.getElementById('movie-overlay');
-    const closeOverlayBtn = document.querySelector('.close-overlay');
-
+    const closeMovieOverlayBtn = movieOverlay.querySelector('.close-overlay');
     const overlayTitle = document.getElementById('overlay-title');
     const overlayOverview = document.getElementById('overlay-overview');
     const overlayPoster = document.getElementById('overlay-poster');
     const overlayTrailerBtn = document.getElementById('overlay-trailer-btn');
 
+    // Trailer Video Overlay
+    const trailerOverlay = document.getElementById('trailer-overlay');
+    const closeTrailerOverlayBtn = trailerOverlay.querySelector('.close-overlay');
+    const trailerIframe = document.getElementById('trailer-iframe');
+    const youtubeFallbackLink = document.getElementById('youtube-fallback-link');
+
+    let currentTrailerUrls = null;
+
     // --- Event Listeners ---
 
-    document.querySelector('.movies-grid').addEventListener('click', (event) => {
+    moviesGrid.addEventListener('click', (event) => {
         const card = event.target.closest('.movie-card');
-        if (!card) return;
-        
-        // The trailer button on the card is now handled by the overlay
-        openMovieOverlay(card.dataset);
+        if (card) openMovieOverlay(card.dataset);
     });
 
-    closeOverlayBtn.addEventListener('click', closeMovieOverlay);
+    overlayTrailerBtn.addEventListener('click', () => {
+        if (currentTrailerUrls) openTrailerOverlay(currentTrailerUrls);
+    });
+
+    // Use event delegation for all close buttons
+    document.body.addEventListener('click', (event) => {
+        if (event.target.matches('.close-overlay') || event.target.matches('.quit-btn')) {
+            const modalToClose = event.target.dataset.close;
+            if (modalToClose === 'movie-overlay') {
+                closeMovieOverlay();
+            } else if (modalToClose === 'trailer-overlay') {
+                closeTrailerOverlay();
+            }
+        }
+    });
+
     movieOverlay.addEventListener('click', (event) => {
         if (event.target === movieOverlay) closeMovieOverlay();
     });
 
+    trailerOverlay.addEventListener('click', (event) => {
+        if (event.target === trailerOverlay) closeTrailerOverlay();
+    });
+
     document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && movieOverlay.style.display !== 'none') {
-            closeMovieOverlay();
+        if (event.key === 'Escape') {
+            if (trailerOverlay.style.display === 'flex') closeTrailerOverlay();
+            else if (movieOverlay.style.display === 'flex') closeMovieOverlay();
         }
     });
 
     // --- Functions ---
 
     async function openMovieOverlay(dataset) {
-        // 1. Populate overlay with initial data (fast)
         overlayTitle.textContent = dataset.title;
         overlayOverview.textContent = dataset.overview;
         overlayPoster.src = dataset.posterUrl;
         
-        // 2. Show the overlay immediately
         movieOverlay.style.display = 'flex';
         document.body.style.overflow = 'hidden';
 
-        // 3. Show a loading state for the trailer button
-        overlayTrailerBtn.style.display = 'inline-block';
         overlayTrailerBtn.textContent = 'Chargement...';
-        overlayTrailerBtn.href = '#';
-        overlayTrailerBtn.onclick = (e) => e.preventDefault(); // Disable click while loading
+        overlayTrailerBtn.disabled = true;
+        currentTrailerUrls = null;
 
-        // 4. Fetch the trailer URL from our new API endpoint
         try {
             const response = await fetch(`/trailer/${dataset.id}/`);
+            if (!response.ok) throw new Error('Network response was not ok');
             const data = await response.json();
 
-            if (data.trailer_url) {
+            if (data.embed_url && data.watch_url) {
+                currentTrailerUrls = data;
                 overlayTrailerBtn.textContent = '🎬 Voir la bande-annonce';
-                overlayTrailerBtn.href = data.trailer_url;
-                overlayTrailerBtn.onclick = null; // Remove the disabled click handler
+                overlayTrailerBtn.disabled = false;
             } else {
                 overlayTrailerBtn.textContent = 'Bande-annonce indisponible';
-                overlayTrailerBtn.classList.add('disabled');
             }
         } catch (error) {
             console.error('Failed to fetch trailer:', error);
             overlayTrailerBtn.textContent = 'Erreur de chargement';
-            overlayTrailerBtn.classList.add('disabled');
         }
     }
 
     function closeMovieOverlay() {
         movieOverlay.style.display = 'none';
+        if (trailerOverlay.style.display !== 'flex') {
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    function openTrailerOverlay(urls) {
+        const embedUrl = new URL(urls.embed_url);
+        embedUrl.searchParams.set('autoplay', '1');
+        embedUrl.searchParams.set('rel', '0');
+        embedUrl.searchParams.set('modestbranding', '1');
+        embedUrl.searchParams.set('origin', window.location.origin);
+        
+        trailerIframe.src = embedUrl.toString();
+        youtubeFallbackLink.href = urls.watch_url;
+        youtubeFallbackLink.style.display = 'block';
+
+        trailerOverlay.style.display = 'flex';
+        movieOverlay.style.display = 'none';
+    }
+
+    function closeTrailerOverlay() {
+        trailerIframe.src = "";
+        youtubeFallbackLink.style.display = 'none';
+        trailerOverlay.style.display = 'none';
         document.body.style.overflow = 'auto';
-        // Reset trailer button for next time
-        overlayTrailerBtn.textContent = '🎬 Voir la bande-annonce';
-        overlayTrailerBtn.classList.remove('disabled');
-        overlayTrailerBtn.href = '#';
     }
 });

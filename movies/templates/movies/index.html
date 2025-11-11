@@ -49,18 +49,43 @@
     </div>
 </main>
 
-<!-- Modal Overlay -->
-<div id="movie-overlay">
+<!-- Movie Details Overlay -->
+<div id="movie-overlay" class="overlay">
     <div class="overlay-content">
         <span class="close-overlay" role="button" aria-label="Fermer">&times;</span>
         <img id="overlay-poster" src="" alt="Affiche du film">
         <div class="overlay-details">
             <h2 id="overlay-title"></h2>
             <p id="overlay-overview"></p>
-            <a id="overlay-trailer-btn" href="#" class="trailer-btn" target="_blank">🎬 Voir la bande-annonce</a>
+            <div class="overlay-actions">
+                <button id="overlay-trailer-btn" class="trailer-btn">🎬 Voir la bande-annonce</button>
+                <button class="quit-btn" data-close="movie-overlay">Quitter</button>
+            </div>
         </div>
     </div>
 </div>
+
+<!-- Trailer Video Overlay -->
+<div id="trailer-overlay" class="overlay">
+    <div class="video-container">
+        <span class="close-overlay" role="button" aria-label="Fermer">&times;</span>
+        <div class="iframe-wrapper">
+            <iframe id="trailer-iframe" 
+                    src="" 
+                    title="YouTube video player" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    referrerpolicy="strict-origin-when-cross-origin" 
+                    allowfullscreen>
+            </iframe>
+        </div>
+        <a id="youtube-fallback-link" href="#" target="_blank" rel="noopener noreferrer">
+            Si la vidéo ne se charge pas, cliquez ici pour la voir sur YouTube.
+        </a>
+        <button class="quit-btn" data-close="trailer-overlay">Fermer le lecteur</button>
+    </div>
+</div>
+
 
 <script src="{% static 'script.js' %}"></script>
 </body>

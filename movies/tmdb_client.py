@@ -4,8 +4,8 @@ from django.conf import settings
 BASE_URL = "https://api.themoviedb.org/3"
 API_KEY = settings.TMDB_API_KEY
 
-def get_trailer_url(movie_id):
-    """Fetches the trailer URL for a given movie ID from TMDb."""
+def get_trailer_urls(movie_id):
+    """Fetches the YouTube embed and watch URLs for a given movie ID from TMDb."""
     url = f"{BASE_URL}/movie/{movie_id}/videos?api_key={API_KEY}&language=fr-FR"
     try:
         response = requests.get(url)
@@ -13,7 +13,11 @@ def get_trailer_url(movie_id):
         videos = response.json().get("results", [])
         for video in videos:
             if video["type"] == "Trailer" and video["site"] == "YouTube":
-                return f"https://www.youtube.com/watch?v={video['key']}"
+                video_key = video['key']
+                return {
+                    "embed_url": f"https://www.youtube.com/embed/{video_key}",
+                    "watch_url": f"https://www.youtube.com/watch?v={video_key}"
+                }
     except requests.RequestException as e:
         print(f"Error fetching trailer for movie {movie_id}: {e}")
     return None
@@ -26,7 +30,6 @@ def _format_movie_data(movie):
         "overview": movie.get("overview", "Pas de résumé disponible."),
         "release_date": movie.get("release_date", "Inconnue"),
         "poster_url": f"https://image.tmdb.org/t/p/w500{movie['poster_path']}" if movie.get("poster_path") else "",
-        # Trailer URL is now fetched on demand
     }
 
 def get_popular_movies():
