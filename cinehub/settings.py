@@ -22,10 +22,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-fmdk9dxodz+-oprsb+^p87e-dd9u(^(_t4v@ax1sh$4b6i$+$g'
 
+# TMDB API Key - It's better to use environment variables for production
+TMDB_API_KEY = "1c7bf3bd03e895b75fd15b0022e31315"
+
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.1.193', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -102,7 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/4.2/topics/i18n/
+# https://docs.djangoproject.com/en/42/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 

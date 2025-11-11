@@ -3,35 +3,65 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jessna CineHub</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
-    <header>
-        <h1>🎬 Jessna CineHub</h1>
-        <form method="POST">
-            {% csrf_token %}
-            <input type="text" name="query" placeholder="Rechercher un film ou série..." value="{{ query }}">
-            <button type="submit">Rechercher</button>
-        </form>
-    </header>
 
-    <main>
-        {% if movies %}
-            <div class="movies-grid">
-                {% for movie in movies %}
-                <div class="movie-card">
-                    {% if movie.poster_url %}
-                    <img src="{{ movie.poster_url }}" alt="{{ movie.title }}">
-                    {% endif %}
+<header>
+    <h1>Jessna CineHub</h1>
+    <form method="get" action="{% url 'index' %}">
+        <input type="text" name="query" placeholder="Rechercher un film..." value="{{ query }}">
+        <button type="submit">Rechercher</button>
+    </form>
+</header>
+
+<main>
+    {% if query and movies %}
+        <h2 class="search-title">Résultats pour "{{ query }}"</h2>
+    {% endif %}
+
+    <div class="movies-grid">
+        {% for movie in movies %}
+            <div class="movie-card" 
+                 data-id="{{ movie.id }}"
+                 data-title="{{ movie.title|escapejs }}"
+                 data-overview="{{ movie.overview|escapejs }}"
+                 data-poster-url="{{ movie.poster_url }}">
+                
+                <img src="{{ movie.poster_url }}" alt="Affiche de {{ movie.title }}">
+                <div class="movie-card-content">
                     <h2>{{ movie.title }}</h2>
-                    <p><strong>Date :</strong> {{ movie.release_date }}</p>
-                    <p>{{ movie.overview }}</p>
-                    <a href="{{ movie.youtube_trailer }}" target="_blank">🎥 Voir bande-annonce</a>
+                    <p>Sortie : {{ movie.release_date }}</p>
+                    <p class="short-overview">{{ movie.overview|truncatechars:100 }}</p>
                 </div>
-                {% endfor %}
             </div>
-        {% endif %}
-    </main>
+        {% empty %}
+            <p style="text-align:center; color:var(--accent-color); grid-column: 1 / -1;">
+                {% if query %}
+                    Aucun film trouvé pour "{{ query }}". Essayez une autre recherche.
+                {% else %}
+                    Impossible de charger les films populaires pour le moment.
+                {% endif %}
+            </p>
+        {% endfor %}
+    </div>
+</main>
+
+<!-- Modal Overlay -->
+<div id="movie-overlay">
+    <div class="overlay-content">
+        <span class="close-overlay" role="button" aria-label="Fermer">&times;</span>
+        <img id="overlay-poster" src="" alt="Affiche du film">
+        <div class="overlay-details">
+            <h2 id="overlay-title"></h2>
+            <p id="overlay-overview"></p>
+            <a id="overlay-trailer-btn" href="#" class="trailer-btn" target="_blank">🎬 Voir la bande-annonce</a>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'script.js' %}"></script>
 </body>
 </html>

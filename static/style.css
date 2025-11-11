@@ -1,9 +1,254 @@
-body { font-family: Arial, sans-serif; background:#111; color:#eee; margin:0; padding:0; }
-header { background:#1a73e8; padding:20px; text-align:center; }
-header h1 { margin:0 0 10px; }
-header input { padding:10px; width:300px; border-radius:5px; border:none; }
-header button { padding:10px 15px; border:none; border-radius:5px; background:#ffcc00; cursor:pointer; }
-.movies-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; padding:20px; }
-.movie-card { background:#222; padding:15px; border-radius:10px; }
-.movie-card img { width:100%; border-radius:10px; }
-.movie-card a { display:inline-block; margin-top:10px; color:#1a73e8; text-decoration:none; }
+:root {
+    --primary-bg-color: #101010;
+    --secondary-bg-color: #1d1d1d;
+    --primary-text-color: #f5f5f5;
+    --secondary-text-color: #a0a0a0;
+    --accent-color: #fbc02d;
+    --accent-color-hover: #fdd835;
+    --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    --border-radius: 12px;
+    --font-family: 'Poppins', 'Arial', sans-serif;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family);
+    background-color: var(--primary-bg-color);
+    color: var(--primary-text-color);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+header {
+    background: linear-gradient(to right, #2c3e50, #4ca1af);
+    padding: 2rem 1rem;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border-bottom: 4px solid var(--accent-color);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+header form {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+header input {
+    padding: 0.8rem 1.2rem;
+    width: clamp(250px, 50vw, 500px);
+    border-radius: var(--border-radius);
+    border: 2px solid transparent;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--primary-text-color);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+header input::placeholder {
+    color: var(--secondary-text-color);
+}
+
+header input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+header button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: var(--border-radius);
+    background-color: var(--accent-color);
+    color: var(--primary-bg-color);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+header button:hover {
+    background-color: var(--accent-color-hover);
+    transform: translateY(-2px);
+}
+
+.search-title {
+    text-align: center;
+    margin: 2rem 0;
+    font-size: 1.8rem;
+    color: var(--accent-color);
+}
+
+.movies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.movie-card {
+    background-color: var(--secondary-bg-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.movie-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--card-shadow);
+}
+
+.movie-card img {
+    width: 100%;
+    height: 420px;
+    object-fit: cover;
+    display: block;
+}
+
+.movie-card-content {
+    padding: 1.5rem;
+}
+
+.movie-card h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.4rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.movie-card p {
+    font-size: 0.9rem;
+    color: var(--secondary-text-color);
+    margin: 0.5rem 0;
+}
+
+.short-overview {
+    height: 3.6em; /* Approx 3 lines */
+    line-height: 1.2em;
+    overflow: hidden;
+}
+
+.trailer-btn {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: var(--border-radius);
+    background-color: var(--accent-color);
+    color: var(--primary-bg-color);
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.trailer-btn:hover {
+    background-color: var(--accent-color-hover);
+}
+
+#movie-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+}
+
+.overlay-content {
+    background-color: var(--secondary-bg-color);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    width: 90%;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    gap: 2rem;
+    position: relative;
+}
+
+.close-overlay {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 2.5rem;
+    color: var(--primary-text-color);
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-overlay:hover {
+    color: var(--accent-color);
+}
+
+#overlay-poster {
+    width: 300px;
+    height: 450px;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+}
+
+.overlay-details {
+    text-align: left;
+}
+
+#overlay-title {
+    font-size: 2.5rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+#overlay-overview {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--secondary-text-color);
+    margin-bottom: 2rem;
+}
+
+#overlay-trailer-btn {
+    font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+    header {
+        padding: 1.5rem 1rem;
+    }
+    header h1 {
+        font-size: 2.2rem;
+    }
+    .overlay-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .overlay-details {
+        text-align: center;
+    }
+    #overlay-poster {
+        width: 250px;
+        height: auto;
+    }
+    #overlay-title {
+        font-size: 2rem;
+    }
+}

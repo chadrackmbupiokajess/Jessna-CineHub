@@ -1,28 +1,29 @@
+from django.http import JsonResponse
 from django.shortcuts import render
-import requests
-
-TMDB_API_KEY = "1c7bf3bd03e895b75fd15b0022e31315"
-
-def search_movies(query):
-    url = f"https://api.themoviedb.org/3/search/movie?api_key={TMDB_API_KEY}&query={query}"
-    response = requests.get(url)
-    data = response.json()
-    results = []
-    for movie in data.get("results", []):
-        results.append({
-            "title": movie["title"],
-            "overview": movie.get("overview", "Pas de résumé disponible"),
-            "release_date": movie.get("release_date", "Inconnue"),
-            "poster_url": f"https://image.tmdb.org/t/p/w500{movie['poster_path']}" if movie.get("poster_path") else "",
-            "youtube_trailer": f"https://www.youtube.com/results?search_query={movie['title'].replace(' ','+')}+bande+annonce"
-        })
-    return results
+from . import tmdb_client
 
 def index(request):
-    movies = []
-    query = ""
-    if request.method == "POST":
-        query = request.POST.get("query")
-        if query:
-            movies = search_movies(query)
-    return render(request, "movies/index.html", {"movies": movies, "query": query})
+    """
+    Displays the main page with a list of movies.
+    Shows popular movies by default, or search results if a query is provided.
+    """
+    query = request.GET.get("query", "").strip()
+    
+    if query:
+        movies = tmdb_client.search_movies(query)
+    else:
+        movies = tmdb_client.get_popular_movies()
+        
+    context = {
+        "movies": movies,
+        "query": query,
+    }
+    return render(request, "movies/index.html", context)
+
+def get_trailer(request, movie_id):
+    """
+    API endpoint to fetch a movie's trailer URL.
+    Returns a JSON response with the trailer URL.
+    """
+    trailer_url = tmdb_client.get_trailer_url(movie_id)
+    return JsonResponse({"trailer_url": trailer_url})
