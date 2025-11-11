@@ -22,6 +22,17 @@ def get_trailer_urls(movie_id):
         print(f"Error fetching trailer for movie {movie_id}: {e}")
     return None
 
+def get_movie_providers(movie_id):
+    """Fetches the movie providers for a given movie ID from TMDb."""
+    url = f"{BASE_URL}/movie/{movie_id}/watch/providers?api_key={API_KEY}"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        print(f"Error fetching movie providers for movie {movie_id}: {e}")
+        return None
+
 def _format_movie_data(movie):
     """Formats raw movie data from TMDb into a more usable dictionary."""
     return {

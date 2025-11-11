@@ -6,4 +6,5 @@ urlpatterns = [
     path('trailer/<int:movie_id>/', views.get_trailer, name='get_trailer'),
     path('about/', views.about, name='about'),
     path('load-more-movies/', views.load_more_movies, name='load_more_movies'),
+    path('movie-providers/<int:movie_id>/', views.get_movie_providers, name='get_movie_providers'),
 ]

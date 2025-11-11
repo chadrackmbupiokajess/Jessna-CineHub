@@ -59,6 +59,14 @@ def get_trailer(request, movie_id):
     trailer_urls = tmdb_client.get_trailer_urls(movie_id)
     return JsonResponse(trailer_urls or {})
 
+def get_movie_providers(request, movie_id):
+    """
+    API endpoint to fetch a movie's providers.
+    Returns a JSON response with a list of providers.
+    """
+    providers = tmdb_client.get_movie_providers(movie_id)
+    return JsonResponse(providers or {})
+
 def about(request):
     """
     Displays the About Us page.

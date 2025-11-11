@@ -47,13 +47,14 @@
 <!-- Movie Details Overlay -->
 <div id="movie-overlay" class="overlay">
     <div class="overlay-content">
-        <span class="close-overlay" role="button" aria-label="Fermer">&times;</span>
+        <span class="close-overlay" role="button" aria-label="Fermer" data-close="movie-overlay">&times;</span>
         <img id="overlay-poster" src="" alt="Affiche du film">
         <div class="overlay-details">
             <h2 id="overlay-title"></h2>
             <p id="overlay-overview"></p>
             <div class="overlay-actions">
                 <button id="overlay-trailer-btn" class="trailer-btn">🎬 Voir la bande-annonce</button>
+                <button id="overlay-full-video-btn" class="full-video-btn">🎬 Voir le film complet</button>
                 <button class="quit-btn" data-close="movie-overlay">Quitter</button>
             </div>
         </div>
@@ -63,7 +64,7 @@
 <!-- Trailer Video Overlay -->
 <div id="trailer-overlay" class="overlay">
     <div class="video-container">
-        <span class="close-overlay" role="button" aria-label="Fermer">&times;</span>
+        <span class="close-overlay" role="button" aria-label="Fermer" data-close="trailer-overlay">&times;</span>
         <div class="iframe-wrapper">
             <iframe id="trailer-iframe" 
                     src="" 
@@ -82,6 +83,21 @@
         </div>
     </div>
 </div>
+
+<!-- Providers Overlay -->
+<div id="providers-overlay" class="overlay">
+    <div class="providers-content">
+        <span class="close-overlay" role="button" aria-label="Fermer" data-close="providers-overlay">&times;</span>
+        <h3>Où voir ce film ?</h3>
+        <div id="providers-list">
+            <!-- Les fournisseurs seront injectés ici par JavaScript -->
+        </div>
+        <div class="providers-actions">
+            <button class="quit-btn" data-close="providers-overlay">Fermer</button>
+        </div>
+    </div>
+</div>
+
 
 {# On passe les données des films au JavaScript de manière propre et sécurisée. #}
 {{ movies|json_script:"movies-data" }}
