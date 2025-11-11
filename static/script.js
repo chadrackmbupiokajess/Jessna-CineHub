@@ -16,20 +16,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const trailerIframe = document.getElementById('trailer-iframe');
     const youtubeFallbackLink = document.getElementById('youtube-fallback-link');
 
+    // --- Data Storage ---
+    // Read all movie data from the json_script tag
+    const moviesDataElement = document.getElementById('movies-data');
+    const allMovies = moviesDataElement ? JSON.parse(moviesDataElement.textContent) : [];
     let currentTrailerUrls = null;
 
     // --- Event Listeners ---
 
     moviesGrid.addEventListener('click', (event) => {
         const card = event.target.closest('.movie-card');
-        if (card) openMovieOverlay(card.dataset);
+        if (card) {
+            const movieId = parseInt(card.dataset.id);
+            const movie = allMovies.find(m => m.id === movieId);
+            if (movie) {
+                openMovieOverlay(movie);
+            }
+        }
     });
 
     overlayTrailerBtn.addEventListener('click', () => {
         if (currentTrailerUrls) openTrailerOverlay(currentTrailerUrls);
     });
 
-    // Use event delegation for all close buttons
     document.body.addEventListener('click', (event) => {
         if (event.target.matches('.close-overlay') || event.target.matches('.quit-btn')) {
             const modalToClose = event.target.dataset.close;
@@ -58,10 +67,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Functions ---
 
-    async function openMovieOverlay(dataset) {
-        overlayTitle.textContent = dataset.title;
-        overlayOverview.textContent = dataset.overview;
-        overlayPoster.src = dataset.posterUrl;
+    async function openMovieOverlay(movie) {
+        overlayTitle.textContent = movie.title;
+        overlayOverview.textContent = movie.overview;
+        overlayPoster.src = movie.poster_url;
         
         movieOverlay.style.display = 'flex';
         document.body.style.overflow = 'hidden';
@@ -71,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentTrailerUrls = null;
 
         try {
-            const response = await fetch(`/trailer/${dataset.id}/`);
+            const response = await fetch(`/trailer/${movie.id}/`);
             if (!response.ok) throw new Error('Network response was not ok');
             const data = await response.json();
 

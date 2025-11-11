@@ -30,11 +30,8 @@
 
     <div class="movies-grid">
         {% for movie in movies %}
-            <div class="movie-card" 
-                 data-id="{{ movie.id }}"
-                 data-title="{{ movie.title|escapejs }}"
-                 data-overview="{{ movie.overview|escapejs }}"
-                 data-poster-url="{{ movie.poster_url }}">
+            {# On ne garde que l'ID du film dans l'attribut data. #}
+            <div class="movie-card" data-id="{{ movie.id }}">
                 
                 <img src="{{ movie.poster_url }}" alt="Affiche de {{ movie.title }}">
                 <div class="movie-card-content">
@@ -92,6 +89,8 @@
     </div>
 </div>
 
+{# On passe toutes les données des films au JavaScript de manière propre et sécurisée. #}
+{{ movies|json_script:"movies-data" }}
 
 <script src="{% static 'script.js' %}"></script>
 </body>
