@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Trailer Video Overlay
     const trailerOverlay = document.getElementById('trailer-overlay');
     const trailerIframe = document.getElementById('trailer-iframe');
-    const youtubeFallbackLink = document.getElementById('youtube-fallback-link');
+    const youtubeWatchBtn = document.getElementById('youtube-watch-btn');
 
     // --- Data Storage ---
     const moviesDataElement = document.getElementById('movies-data');
@@ -66,11 +66,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Infinite Scroll Listener
     window.addEventListener('scroll', () => {
-        // Check if we should load more movies
         if (isLoading || currentPage >= totalPages) return;
 
         const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-        if (scrollTop + clientHeight >= scrollHeight - 100) { // 100px buffer
+        if (scrollTop + clientHeight >= scrollHeight - 100) {
             loadMoreMovies();
         }
     });
@@ -91,17 +90,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (data.movies_html) {
                 moviesGrid.insertAdjacentHTML('beforeend', data.movies_html);
-                allMovies = allMovies.concat(data.new_movies_data); // Add new movies to our data store
+                allMovies = allMovies.concat(data.new_movies_data);
                 currentPage = nextPage;
             }
 
             if (!data.has_next) {
-                currentPage = totalPages; // No more pages to load
+                currentPage = totalPages;
             }
 
         } catch (error) {
             console.error('Failed to load more movies:', error);
-            // Optionally, show an error message to the user
         } finally {
             isLoading = false;
             infiniteScrollLoader.style.display = 'none';
@@ -159,18 +157,14 @@ document.addEventListener('DOMContentLoaded', () => {
         embedUrl.searchParams.set('origin', window.location.origin);
         
         trailerIframe.src = embedUrl.toString();
-        youtubeFallbackLink.href = urls.watch_url;
-        youtubeFallbackLink.style.display = 'block';
+        youtubeWatchBtn.href = urls.watch_url;
 
         trailerOverlay.style.display = 'flex';
         movieOverlay.style.display = 'none';
     }
 
-
-
     function closeTrailerOverlay() {
         trailerIframe.src = "";
-        youtubeFallbackLink.style.display = 'none';
         trailerOverlay.style.display = 'none';
         document.body.style.overflow = 'auto';
     }
