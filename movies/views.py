@@ -37,13 +37,11 @@ def load_more_movies(request):
     else:
         movies, total_pages = tmdb_client.get_popular_movies(page=page)
     
-    # Render only the movie cards partial template
     movies_html = render_to_string(
         "movies/partials/movie_cards.html", 
         {"movies": movies}
     )
 
-    # Also pass the new movie data for the json_script
     return JsonResponse({
         "movies_html": movies_html,
         "new_movies_data": movies,
@@ -59,13 +57,16 @@ def get_trailer(request, movie_id):
     trailer_urls = tmdb_client.get_trailer_urls(movie_id)
     return JsonResponse(trailer_urls or {})
 
-def get_movie_providers(request, movie_id):
+def get_ambiance_clip(request, movie_id):
     """
-    API endpoint to fetch a movie's providers.
-    Returns a JSON response with a list of providers.
+    API endpoint to fetch a movie's trailer to use as an ambiance clip.
     """
-    providers = tmdb_client.get_movie_providers(movie_id)
-    return JsonResponse(providers or {})
+    trailer_urls = tmdb_client.get_trailer_urls(movie_id)
+    if trailer_urls and trailer_urls.get("embed_url"):
+        # The frontend expects a 'video_url' key, so we map the embed_url to it.
+        return JsonResponse({"video_url": trailer_urls["embed_url"]})
+    return JsonResponse({})
+
 
 def about(request):
     """

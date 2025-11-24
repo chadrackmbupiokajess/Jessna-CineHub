@@ -25,6 +25,9 @@ SECRET_KEY = 'django-insecure-fmdk9dxodz+-oprsb+^p87e-dd9u(^(_t4v@ax1sh$4b6i$+$g
 # TMDB API Key - It's better to use environment variables for production
 TMDB_API_KEY = "1c7bf3bd03e895b75fd15b0022e31315"
 
+# Pexels API Key
+PEXELS_API_KEY = "FtG3PNrHPffPBq4jUdee5qGBl1jK9NfgNqxO1LT7srULdsiqnQTi5MV2"
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -106,7 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/42/topics/i18n/
+# https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 

@@ -1,8 +1,10 @@
 import requests
 from django.conf import settings
+import random
 
 BASE_URL = "https://api.themoviedb.org/3"
 API_KEY = settings.TMDB_API_KEY
+PEXELS_API_KEY = settings.PEXELS_API_KEY
 
 def get_trailer_urls(movie_id):
     """Fetches the YouTube embed and watch URLs for a given movie ID from TMDb."""
@@ -22,16 +24,45 @@ def get_trailer_urls(movie_id):
         print(f"Error fetching trailer for movie {movie_id}: {e}")
     return None
 
-def get_movie_providers(movie_id):
-    """Fetches the movie providers for a given movie ID from TMDb."""
-    url = f"{BASE_URL}/movie/{movie_id}/watch/providers?api_key={API_KEY}"
+def get_movie_keywords_and_title(movie_id):
+    """Fetches keywords and title for a movie from TMDb."""
+    url = f"{BASE_URL}/movie/{movie_id}?api_key={API_KEY}&append_to_response=keywords"
     try:
         response = requests.get(url)
         response.raise_for_status()
-        return response.json()
+        data = response.json()
+        title = data.get('title', '')
+        keywords = [kw['name'] for kw in data.get('keywords', {}).get('keywords', [])]
+        return title, keywords
     except requests.RequestException as e:
-        print(f"Error fetching movie providers for movie {movie_id}: {e}")
+        print(f"Error fetching keywords/title for movie {movie_id}: {e}")
+        return None, []
+
+def get_pexels_video(query):
+    """Fetches a random landscape video from Pexels based on a query."""
+    if not query:
         return None
+    pexels_url = "https://api.pexels.com/videos/search"
+    headers = {"Authorization": PEXELS_API_KEY}
+    params = {
+        "query": query,
+        "per_page": 15,
+        "orientation": "landscape"
+    }
+    try:
+        response = requests.get(pexels_url, headers=headers, params=params)
+        response.raise_for_status()
+        videos = response.json().get("videos", [])
+        if videos:
+            video = random.choice(videos)
+            # Find a high-quality HD video file link
+            video_file = next((f for f in video['video_files'] if f.get('quality') == 'hd' and f.get('link')), None)
+            if video_file:
+                return {"video_url": video_file['link']}
+    except requests.RequestException as e:
+        print(f"Error fetching video from Pexels for query '{query}': {e}")
+    return None
+
 
 def _format_movie_data(movie):
     """Formats raw movie data from TMDb into a more usable dictionary."""

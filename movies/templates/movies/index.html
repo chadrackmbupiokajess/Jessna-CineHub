@@ -10,12 +10,11 @@
 <body>
 
 <header>
-    <!-- Éléments décoratifs pour l'animation -->
     <div class="decorative-bubble bubble-1"></div>
     <div class="decorative-bubble bubble-2"></div>
 
     <div class="header-content">
-        <nav class="main-nav"> {# Ajout de la classe main-nav #}
+        <nav class="main-nav">
             <a href="{% url 'index' %}" class="nav-link active">Accueil</a>
             <a href="{% url 'about' %}" class="nav-link">À propos</a>
         </nav>
@@ -33,15 +32,12 @@
     {% endif %}
 
     <div class="movies-grid" id="movies-grid">
-        {# Le contenu initial est maintenant chargé via un template partiel #}
         {% include "movies/partials/movie_cards.html" with movies=movies %}
     </div>
 
-    {# Conteneur pour le spinner de chargement du défilement infini #}
     <div id="infinite-scroll-loader" class="loader-container" style="display: none;">
         <div class="loader-spinner"></div>
     </div>
-
 </main>
 
 <!-- Movie Details Overlay -->
@@ -54,7 +50,6 @@
             <p id="overlay-overview"></p>
             <div class="overlay-actions">
                 <button id="overlay-trailer-btn" class="trailer-btn">🎬 Voir la bande-annonce</button>
-                <button id="overlay-full-video-btn" class="full-video-btn">🎬 Voir le film complet</button>
                 <button class="quit-btn" data-close="movie-overlay">Quitter</button>
             </div>
         </div>
@@ -66,43 +61,17 @@
     <div class="video-container">
         <span class="close-overlay" role="button" aria-label="Fermer" data-close="trailer-overlay">&times;</span>
         <div class="iframe-wrapper">
-            <iframe id="trailer-iframe" 
-                    src="" 
-                    title="YouTube video player" 
-                    frameborder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                    referrerpolicy="strict-origin-when-cross-origin" 
-                    allowfullscreen>
-            </iframe>
+            <iframe id="trailer-iframe" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
         <div class="video-actions">
-            <a id="youtube-watch-btn" href="#" class="youtube-btn" target="_blank" rel="noopener noreferrer">
-                Voir sur YouTube
-            </a>
+            <a id="youtube-watch-btn" href="#" class="youtube-btn" target="_blank" rel="noopener noreferrer">Voir sur YouTube</a>
             <button class="quit-btn" data-close="trailer-overlay">Fermer le lecteur</button>
         </div>
     </div>
 </div>
 
-<!-- Providers Overlay -->
-<div id="providers-overlay" class="overlay">
-    <div class="providers-content">
-        <span class="close-overlay" role="button" aria-label="Fermer" data-close="providers-overlay">&times;</span>
-        <h3>Où voir ce film ?</h3>
-        <div id="providers-list">
-            <!-- Les fournisseurs seront injectés ici par JavaScript -->
-        </div>
-        <div class="providers-actions">
-            <button class="quit-btn" data-close="providers-overlay">Fermer</button>
-        </div>
-    </div>
-</div>
-
-
-{# On passe les données des films au JavaScript de manière propre et sécurisée. #}
 {{ movies|json_script:"movies-data" }}
 
-{# On passe aussi les informations de pagination au JavaScript #}
 <script>
     window.paginationData = {
         currentPage: {{ current_page }},
