@@ -20,16 +20,16 @@ def get_trailer_urls(movie_id):
                 trailer_info = {
                     "embed_url": f"https://www.youtube.com/embed/{video_key}",
                     "watch_url": f"https://www.youtube.com/watch?v={video_key}",
-                    "full_movie_embed": f"https://vidsrc.xyz/embed/movie/{movie_id}",
-                    "full_movie_watch": f"https://vidsrc.xyz/embed/movie/{movie_id}"
+                    "full_movie_embed": f"https://vidsrc.xyz/embed/movie/{movie_id}?ds_lang=fr",
+                    "full_movie_watch": f"https://vidsrc.xyz/embed/movie/{movie_id}?ds_lang=fr"
                 }
                 return trailer_info
         # If no trailer found, still return the full movie link based on ID
         return {
              "embed_url": None,
              "watch_url": None,
-             "full_movie_embed": f"https://vidsrc.xyz/embed/movie/{movie_id}",
-             "full_movie_watch": f"https://vidsrc.xyz/embed/movie/{movie_id}"
+             "full_movie_embed": f"https://vidsrc.xyz/embed/movie/{movie_id}?ds_lang=fr",
+             "full_movie_watch": f"https://vidsrc.xyz/embed/movie/{movie_id}?ds_lang=fr"
         }
 
     except requests.RequestException as e:
@@ -38,8 +38,8 @@ def get_trailer_urls(movie_id):
         return {
              "embed_url": None,
              "watch_url": None,
-             "full_movie_embed": f"https://vidsrc.xyz/embed/movie/{movie_id}",
-             "full_movie_watch": f"https://vidsrc.xyz/embed/movie/{movie_id}"
+             "full_movie_embed": f"https://vidsrc.xyz/embed/movie/{movie_id}?ds_lang=fr",
+             "full_movie_watch": f"https://vidsrc.xyz/embed/movie/{movie_id}?ds_lang=fr"
         }
     return None
 
