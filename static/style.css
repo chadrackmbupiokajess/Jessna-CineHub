@@ -202,7 +202,7 @@ header button:hover {
     overflow: hidden;
 }
 
-.trailer-btn, .full-video-btn {
+.trailer-btn, .full-video-btn, .watch-btn {
     display: inline-block;
     padding: 0.8rem 1.5rem;
     border: none;
@@ -217,12 +217,12 @@ header button:hover {
     overflow: hidden;
 }
 
-.trailer-btn:hover, .full-video-btn:hover {
+.trailer-btn:hover, .full-video-btn:hover, .watch-btn:hover {
     background-color: var(--accent-color-hover);
     transform: translateY(-2px);
 }
 
-.trailer-btn:disabled, .full-video-btn:disabled {
+.trailer-btn:disabled, .full-video-btn:disabled, .watch-btn:disabled {
     background-color: #555;
     cursor: not-allowed;
     transform: none;

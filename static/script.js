@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const overlayOverview = document.getElementById('overlay-overview');
     const overlayPoster = document.getElementById('overlay-poster');
     const overlayTrailerBtn = document.getElementById('overlay-trailer-btn');
+    const overlayWatchBtn = document.getElementById('overlay-watch-btn');
 
     // Trailer Video Overlay
     const trailerOverlay = document.getElementById('trailer-overlay');
@@ -29,18 +30,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Event Listeners ---
 
-    moviesGrid.addEventListener('click', (event) => {
-        const card = event.target.closest('.movie-card');
-        if (card) {
-            currentMovieId = parseInt(card.dataset.id);
-            const movie = allMovies.find(m => m.id === currentMovieId);
-            if (movie) openMovieOverlay(movie);
-        }
-    });
+    if (moviesGrid) {
+        moviesGrid.addEventListener('click', (event) => {
+            const card = event.target.closest('.movie-card');
+            if (card) {
+                currentMovieId = parseInt(card.dataset.id);
+                const movie = allMovies.find(m => m.id === currentMovieId);
+                if (movie) openMovieOverlay(movie);
+            }
+        });
+    }
 
-    overlayTrailerBtn.addEventListener('click', () => {
-        if (currentTrailerUrls) openTrailerOverlay(currentTrailerUrls);
-    });
+    if (overlayTrailerBtn) {
+        overlayTrailerBtn.addEventListener('click', () => {
+            if (currentTrailerUrls && currentTrailerUrls.embed_url) {
+                 openVideoOverlay(currentTrailerUrls.embed_url, currentTrailerUrls.watch_url, true);
+            }
+        });
+    }
+
+    if (overlayWatchBtn) {
+        overlayWatchBtn.addEventListener('click', () => {
+            console.log("Watch button clicked!", currentTrailerUrls);
+            if (currentTrailerUrls && currentTrailerUrls.full_movie_embed) {
+                 openVideoOverlay(currentTrailerUrls.full_movie_embed, null, false);
+            } else {
+                console.error("No full movie URL available");
+                alert("Lien du film non disponible pour le moment.");
+            }
+        });
+    }
 
     document.body.addEventListener('click', (event) => {
         const target = event.target;
@@ -52,19 +71,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     [movieOverlay, trailerOverlay].forEach(overlay => {
-        overlay.addEventListener('click', (event) => {
-            if (event.target === overlay) {
-                const modalToClose = overlay.id.replace('-overlay', '');
-                if (modalToClose === 'movie') closeMovieOverlay();
-                else if (modalToClose === 'trailer') closeTrailerOverlay();
-            }
-        });
+        if (overlay) {
+            overlay.addEventListener('click', (event) => {
+                if (event.target === overlay) {
+                    const modalToClose = overlay.id.replace('-overlay', '');
+                    if (modalToClose === 'movie') closeMovieOverlay();
+                    else if (modalToClose === 'trailer') closeTrailerOverlay();
+                }
+            });
+        }
     });
 
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
-            if (trailerOverlay.style.display === 'flex') closeTrailerOverlay();
-            else if (movieOverlay.style.display === 'flex') closeMovieOverlay();
+            if (trailerOverlay && trailerOverlay.style.display === 'flex') closeTrailerOverlay();
+            else if (movieOverlay && movieOverlay.style.display === 'flex') closeMovieOverlay();
         }
     });
 
@@ -78,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function loadMoreMovies() {
         isLoading = true;
-        infiniteScrollLoader.style.display = 'flex';
+        if (infiniteScrollLoader) infiniteScrollLoader.style.display = 'flex';
         const nextPage = currentPage + 1;
         const url = `/load-more-movies/?page=${nextPage}&query=${encodeURIComponent(query)}`;
 
@@ -87,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error('Network response was not ok');
             const data = await response.json();
 
-            if (data.movies_html) {
+            if (data.movies_html && moviesGrid) {
                 moviesGrid.insertAdjacentHTML('beforeend', data.movies_html);
                 allMovies = allMovies.concat(data.new_movies_data);
                 currentPage = nextPage;
@@ -97,66 +118,113 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Failed to load more movies:', error);
         } finally {
             isLoading = false;
-            infiniteScrollLoader.style.display = 'none';
+            if (infiniteScrollLoader) infiniteScrollLoader.style.display = 'none';
         }
     }
 
     async function openMovieOverlay(movie) {
-        overlayTitle.textContent = movie.title;
-        overlayOverview.textContent = movie.overview;
-        overlayPoster.src = movie.poster_url;
+        if (!movieOverlay) return;
+
+        if (overlayTitle) overlayTitle.textContent = movie.title;
+        if (overlayOverview) overlayOverview.textContent = movie.overview;
+        if (overlayPoster) overlayPoster.src = movie.poster_url;
         
         movieOverlay.style.display = 'flex';
         document.body.style.overflow = 'hidden';
 
-        overlayTrailerBtn.textContent = 'Chargement...';
-        overlayTrailerBtn.disabled = true;
-        overlayTrailerBtn.classList.add('is-loading');
+        if (overlayTrailerBtn) {
+            overlayTrailerBtn.textContent = 'Chargement...';
+            overlayTrailerBtn.disabled = true;
+            overlayTrailerBtn.classList.add('is-loading');
+        }
+        
+        if (overlayWatchBtn) {
+            overlayWatchBtn.textContent = 'Chargement...';
+            overlayWatchBtn.disabled = true;
+        }
+        
         currentTrailerUrls = null;
 
         try {
             const response = await fetch(`/trailer/${movie.id}/`);
             if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
             const data = await response.json();
+            currentTrailerUrls = data;
+            console.log("Movie data loaded:", currentTrailerUrls);
 
-            if (data.embed_url && data.watch_url) {
-                currentTrailerUrls = data;
-                overlayTrailerBtn.textContent = '🎬 Voir la bande-annonce';
-                overlayTrailerBtn.disabled = false;
-            } else {
-                overlayTrailerBtn.textContent = 'Bande-annonce indisponible';
+            // Handle Trailer Button
+            if (overlayTrailerBtn) {
+                if (data.embed_url) {
+                    overlayTrailerBtn.textContent = '🎬 Bande-annonce';
+                    overlayTrailerBtn.disabled = false;
+                } else {
+                    overlayTrailerBtn.textContent = 'Bande-annonce indisponible';
+                    overlayTrailerBtn.disabled = true;
+                }
             }
+
+            // Handle Watch Movie Button (always available via ID)
+            if (overlayWatchBtn) {
+                if (data.full_movie_embed) {
+                    overlayWatchBtn.textContent = '🍿 Voir le film';
+                    overlayWatchBtn.disabled = false;
+                } else {
+                     overlayWatchBtn.textContent = 'Film indisponible';
+                     overlayWatchBtn.disabled = true;
+                }
+            }
+
+
         } catch (error) {
             console.error('Failed to fetch trailer:', error);
-            overlayTrailerBtn.textContent = 'Erreur de chargement';
+            if (overlayTrailerBtn) overlayTrailerBtn.textContent = 'Erreur';
+            if (overlayWatchBtn) overlayWatchBtn.textContent = 'Erreur';
         } finally {
-            overlayTrailerBtn.classList.remove('is-loading');
+            if (overlayTrailerBtn) overlayTrailerBtn.classList.remove('is-loading');
         }
     }
 
     function closeMovieOverlay() {
-        movieOverlay.style.display = 'none';
-        if (trailerOverlay.style.display !== 'flex') {
+        if (movieOverlay) movieOverlay.style.display = 'none';
+        if (trailerOverlay && trailerOverlay.style.display !== 'flex') {
             document.body.style.overflow = 'auto';
         }
     }
 
-    function openTrailerOverlay(urls) {
-        const embedUrl = new URL(urls.embed_url);
-        embedUrl.searchParams.set('autoplay', '1');
-        embedUrl.searchParams.set('rel', '0');
-        
-        trailerIframe.src = embedUrl.toString();
-        youtubeWatchBtn.href = urls.watch_url;
+    function openVideoOverlay(embedUrl, watchUrl, isYoutube) {
+        console.log("Opening video overlay with URL:", embedUrl);
+        if (!trailerIframe || !trailerOverlay) return;
 
+        try {
+            const urlObj = new URL(embedUrl);
+            if (isYoutube) {
+                 urlObj.searchParams.set('autoplay', '1');
+                 urlObj.searchParams.set('rel', '0');
+            }
+            trailerIframe.src = urlObj.toString();
+        } catch (e) {
+             trailerIframe.src = embedUrl;
+        }
+        
+        if (youtubeWatchBtn) {
+            if (isYoutube && watchUrl) {
+                youtubeWatchBtn.href = watchUrl;
+                youtubeWatchBtn.style.display = 'inline-block';
+            } else {
+                youtubeWatchBtn.style.display = 'none';
+            }
+        }
+
+        // Close the details overlay before opening the trailer overlay
+        if (movieOverlay) movieOverlay.style.display = 'none';
+        
         trailerOverlay.style.display = 'flex';
-        movieOverlay.style.display = 'none';
     }
 
     function closeTrailerOverlay() {
-        trailerIframe.src = "";
-        trailerOverlay.style.display = 'none';
-        if (movieOverlay.style.display !== 'flex') {
+        if (trailerIframe) trailerIframe.src = "";
+        if (trailerOverlay) trailerOverlay.style.display = 'none';
+        if (movieOverlay && movieOverlay.style.display !== 'flex') {
             document.body.style.overflow = 'auto';
         }
     }

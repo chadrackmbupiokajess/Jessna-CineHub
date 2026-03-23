@@ -13,15 +13,34 @@ def get_trailer_urls(movie_id):
         response = requests.get(url)
         response.raise_for_status()
         videos = response.json().get("results", [])
+        trailer_info = None
         for video in videos:
             if video["type"] == "Trailer" and video["site"] == "YouTube":
                 video_key = video['key']
-                return {
+                trailer_info = {
                     "embed_url": f"https://www.youtube.com/embed/{video_key}",
-                    "watch_url": f"https://www.youtube.com/watch?v={video_key}"
+                    "watch_url": f"https://www.youtube.com/watch?v={video_key}",
+                    "full_movie_embed": f"https://vidsrc.xyz/embed/movie/{movie_id}",
+                    "full_movie_watch": f"https://vidsrc.xyz/embed/movie/{movie_id}"
                 }
+                return trailer_info
+        # If no trailer found, still return the full movie link based on ID
+        return {
+             "embed_url": None,
+             "watch_url": None,
+             "full_movie_embed": f"https://vidsrc.xyz/embed/movie/{movie_id}",
+             "full_movie_watch": f"https://vidsrc.xyz/embed/movie/{movie_id}"
+        }
+
     except requests.RequestException as e:
         print(f"Error fetching trailer for movie {movie_id}: {e}")
+        # Even on error fetching trailer, we can try to return the movie link structure
+        return {
+             "embed_url": None,
+             "watch_url": None,
+             "full_movie_embed": f"https://vidsrc.xyz/embed/movie/{movie_id}",
+             "full_movie_watch": f"https://vidsrc.xyz/embed/movie/{movie_id}"
+        }
     return None
 
 def get_movie_keywords_and_title(movie_id):

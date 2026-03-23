@@ -51,8 +51,8 @@ def load_more_movies(request):
 
 def get_trailer(request, movie_id):
     """
-    API endpoint to fetch a movie's trailer URLs.
-    Returns a JSON response with both embed and watch URLs.
+    API endpoint to fetch a movie's trailer and full movie URLs.
+    Returns a JSON response with embed and watch URLs for both trailer and movie.
     """
     trailer_urls = tmdb_client.get_trailer_urls(movie_id)
     return JsonResponse(trailer_urls or {})
