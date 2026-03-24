@@ -415,6 +415,30 @@ header button:hover {
     color: var(--primary-bg-color);
 }
 
+/* --- Server Selector Styles --- */
+.server-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--secondary-text-color);
+    border-radius: var(--border-radius);
+    background-color: transparent;
+    color: var(--primary-text-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.server-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--primary-text-color);
+}
+
+.server-btn.active {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: var(--primary-bg-color);
+    font-weight: bold;
+}
+
 /* --- Loader Styles --- */
 .loader-container {
     display: flex;

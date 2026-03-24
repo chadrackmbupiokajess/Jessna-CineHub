@@ -9,37 +9,36 @@ PEXELS_API_KEY = settings.PEXELS_API_KEY
 def get_trailer_urls(movie_id):
     """Fetches the YouTube embed and watch URLs for a given movie ID from TMDb."""
     url = f"{BASE_URL}/movie/{movie_id}/videos?api_key={API_KEY}&language=fr-FR"
+    
+    # SINGLE BEST SERVER SELECTED BY USER
+    full_movie_url = f"https://moviesapi.club/movie/{movie_id}"
+
     try:
         response = requests.get(url)
         response.raise_for_status()
         videos = response.json().get("results", [])
-        trailer_info = None
+        
+        trailer_info = {
+            "embed_url": None,
+            "watch_url": None,
+            "full_movie_embed": full_movie_url
+        }
+
         for video in videos:
             if video["type"] == "Trailer" and video["site"] == "YouTube":
                 video_key = video['key']
-                trailer_info = {
-                    "embed_url": f"https://www.youtube.com/embed/{video_key}",
-                    "watch_url": f"https://www.youtube.com/watch?v={video_key}",
-                    "full_movie_embed": f"https://vidsrc.xyz/embed/movie/{movie_id}?ds_lang=fr",
-                    "full_movie_watch": f"https://vidsrc.xyz/embed/movie/{movie_id}?ds_lang=fr"
-                }
-                return trailer_info
-        # If no trailer found, still return the full movie link based on ID
-        return {
-             "embed_url": None,
-             "watch_url": None,
-             "full_movie_embed": f"https://vidsrc.xyz/embed/movie/{movie_id}?ds_lang=fr",
-             "full_movie_watch": f"https://vidsrc.xyz/embed/movie/{movie_id}?ds_lang=fr"
-        }
+                trailer_info["embed_url"] = f"https://www.youtube.com/embed/{video_key}"
+                trailer_info["watch_url"] = f"https://www.youtube.com/watch?v={video_key}"
+                break 
+        
+        return trailer_info
 
     except requests.RequestException as e:
         print(f"Error fetching trailer for movie {movie_id}: {e}")
-        # Even on error fetching trailer, we can try to return the movie link structure
         return {
              "embed_url": None,
              "watch_url": None,
-             "full_movie_embed": f"https://vidsrc.xyz/embed/movie/{movie_id}?ds_lang=fr",
-             "full_movie_watch": f"https://vidsrc.xyz/embed/movie/{movie_id}?ds_lang=fr"
+             "full_movie_embed": full_movie_url
         }
     return None
 
