@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const trailerOverlay = document.getElementById('trailer-overlay');
     const trailerIframe = document.getElementById('trailer-iframe');
     const youtubeWatchBtn = document.getElementById('youtube-watch-btn');
+    const backToDetailsBtn = document.getElementById('back-to-details-btn');
 
     // --- Data Storage ---
     const moviesDataElement = document.getElementById('movies-data');
@@ -58,6 +59,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error("No full movie URL available");
                 alert("Lien du film non disponible pour le moment.");
             }
+        });
+    }
+
+    if (backToDetailsBtn) {
+        backToDetailsBtn.addEventListener('click', () => {
+             closeTrailerOverlay();
+             if (currentMovieId) {
+                 const movie = allMovies.find(m => m.id === currentMovieId);
+                 if (movie) {
+                     // Re-open movie details overlay
+                     movieOverlay.style.display = 'flex';
+                     // We don't need to fetch data again as it should be cached in currentTrailerUrls
+                     // or we can just rely on the fact that the overlay content hasn't been cleared
+                 }
+             }
         });
     }
 
@@ -224,8 +240,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function closeTrailerOverlay() {
         if (trailerIframe) trailerIframe.src = "";
         if (trailerOverlay) trailerOverlay.style.display = 'none';
+        // Note: We don't restore body overflow here because we might be going back to movieOverlay
+        // The back button logic handles re-opening movieOverlay.
+        // If we just close completely, the user will be back on the grid, and we need to restore scroll.
         if (movieOverlay && movieOverlay.style.display !== 'flex') {
-            document.body.style.overflow = 'auto';
+             document.body.style.overflow = 'auto';
         }
     }
 });
