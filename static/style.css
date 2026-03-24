@@ -23,6 +23,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     padding-top: calc(var(--header-height) + 60px); /* Espace pour le header fixed + tabs */
+    transition: background-color 0.3s ease;
 }
 
 /* --- New Responsive Header --- */
@@ -31,7 +32,7 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 1000;
+    z-index: 3000; /* Très haut pour rester au-dessus du flou */
     background: var(--header-bg);
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     transition: all 0.3s ease;
@@ -148,6 +149,7 @@ body {
     color: white;
     font-size: 1.5rem;
     cursor: pointer;
+    z-index: 3001; /* Above everything */
 }
 
 /* Mobile Search (Initially Hidden on Desktop) */
@@ -201,6 +203,11 @@ body {
 
 
 /* --- Main Content Grid --- */
+/* Add transition for blur effect */
+main {
+    transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
 .movies-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -453,19 +460,33 @@ body {
 
 /* Tablet & Mobile (max-width: 900px) */
 @media (max-width: 900px) {
+    /* BLUR EFFECT LOGIC */
+    body.menu-open {
+        overflow: hidden; /* Prevent scrolling the content when menu is open */
+    }
+
+    body.menu-open main {
+        filter: blur(8px) brightness(0.6); /* Blur and darken */
+        pointer-events: none; /* Make content unclickable */
+    }
+
+    /* END BLUR EFFECT LOGIC */
+
     .nav-links {
         display: none; /* Hide desktop nav */
         position: absolute;
         top: var(--header-height);
         left: 0;
         width: 100%;
-        background-color: var(--secondary-bg-color);
+        background-color: rgba(29, 29, 29, 0.95); /* Slight transparency */
+        backdrop-filter: blur(10px); /* Blur behind menu itself */
         flex-direction: column;
         padding: 1rem 0;
         box-shadow: 0 10px 20px rgba(0,0,0,0.5);
         gap: 0;
+        z-index: 2900;
     }
-    
+
     .nav-links.active {
         display: flex; /* Show when active */
     }
@@ -488,7 +509,7 @@ body {
     .mobile-search {
         display: block;
     }
-    
+
     body {
         padding-top: calc(var(--header-height) + 110px); /* More space for mobile search + tabs */
     }

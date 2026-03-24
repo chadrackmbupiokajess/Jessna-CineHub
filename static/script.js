@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mobileMenuToggle && navLinks) {
         mobileMenuToggle.addEventListener('click', () => {
             navLinks.classList.toggle('active');
+            document.body.classList.toggle('menu-open'); // Toggle blur effect class
+            
             // Change icon from bars to times (X)
             const icon = mobileMenuToggle.querySelector('i');
             if (icon) {
@@ -23,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('click', (event) => {
             if (!navLinks.contains(event.target) && !mobileMenuToggle.contains(event.target) && navLinks.classList.contains('active')) {
                 navLinks.classList.remove('active');
+                document.body.classList.remove('menu-open'); // Remove blur effect
+                
                 const icon = mobileMenuToggle.querySelector('i');
                 if (icon) {
                     icon.classList.remove('fa-times');
