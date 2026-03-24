@@ -455,6 +455,60 @@ header button:hover {
     animation: spin 1s linear infinite;
 }
 
+/* --- About Page Styles --- */
+.about-page-content {
+    max-width: 900px;
+    margin: 4rem auto;
+    padding: 2rem;
+    background-color: var(--secondary-bg-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+}
+
+.about-section {
+    margin-bottom: 2.5rem;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+.about-section:last-child {
+    margin-bottom: 0;
+}
+
+.about-section h2, .about-section h3 {
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.5rem;
+}
+
+.about-section p {
+    line-height: 1.8;
+    color: var(--secondary-text-color);
+    font-size: 1.05rem;
+    margin-bottom: 1rem;
+}
+
+.about-section a {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.about-section a:hover {
+    color: var(--accent-color-hover);
+    text-decoration: underline;
+}
+
+.about-section strong {
+    color: var(--primary-text-color);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 /* --- RESPONSIVE MEDIA QUERIES --- */
 
 /* Tablet & Mobile (max-width: 900px) */
@@ -474,6 +528,11 @@ header button:hover {
     /* Reset max-width for tablets to use more screen space */
     .video-container {
         max-width: 95vw;
+    }
+    
+    .about-page-content {
+        margin: 2rem 1rem;
+        padding: 1.5rem;
     }
 }
 
