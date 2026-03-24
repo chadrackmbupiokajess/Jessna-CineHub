@@ -20,14 +20,21 @@
         </nav>
         <h1>Jessna CinéHub</h1>
         <form method="get" action="{% url 'index' %}">
-            <input type="text" name="query" placeholder="Rechercher un film..." value="{{ query }}">
+            <input type="text" name="query" placeholder="Rechercher un film ou une série..." value="{{ query }}">
+            <input type="hidden" name="category" value="{{ category }}">
             <button type="submit">Rechercher</button>
         </form>
+
+        <div class="category-nav">
+            <a href="{% url 'index' %}?category=all" class="category-link {% if category == 'all' or not category %}active{% endif %}">Tout</a>
+            <a href="{% url 'index' %}?category=movie" class="category-link {% if category == 'movie' %}active{% endif %}">Films</a>
+            <a href="{% url 'index' %}?category=tv" class="category-link {% if category == 'tv' %}active{% endif %}">Séries</a>
+        </div>
     </div>
 </header>
 
 <main>
-    {% if query and movies %}
+    {% if query %}
         <h2 class="search-title">Résultats pour "{{ query }}"</h2>
     {% endif %}
 
@@ -40,17 +47,33 @@
     </div>
 </main>
 
-<!-- Movie Details Overlay -->
+<!-- Movie/TV Details Overlay -->
 <div id="movie-overlay" class="overlay">
     <div class="overlay-content">
         <span class="close-overlay" role="button" aria-label="Fermer" data-close="movie-overlay">&times;</span>
-        <img id="overlay-poster" src="" alt="Affiche du film">
+        <img id="overlay-poster" src="" alt="Affiche">
         <div class="overlay-details">
             <h2 id="overlay-title"></h2>
             <p id="overlay-overview"></p>
-            <div class="overlay-actions">
+            
+            <!-- Movie Actions -->
+            <div id="movie-actions" class="overlay-actions">
                 <button id="overlay-trailer-btn" class="trailer-btn">🎬 Bande-annonce</button>
                 <button id="overlay-watch-btn" class="watch-btn">🍿 Voir le film</button>
+            </div>
+
+            <!-- TV Show Specific Section -->
+            <div id="tv-show-details" style="display: none; margin-top: 1.5rem;">
+                <h3 style="color: var(--accent-color); margin-bottom: 0.5rem;">Saisons & Épisodes</h3>
+                <select id="season-select" class="season-select">
+                    <option value="" disabled selected>Chargement des saisons...</option>
+                </select>
+                <div id="episodes-list" class="episodes-list">
+                    <!-- Episodes will be populated here -->
+                </div>
+            </div>
+
+            <div class="overlay-actions" style="margin-top: 1rem;">
                 <button class="quit-btn" data-close="movie-overlay">Quitter</button>
             </div>
         </div>
@@ -85,7 +108,8 @@
     window.paginationData = {
         currentPage: {{ current_page }},
         totalPages: {{ total_pages }},
-        query: "{{ query|escapejs }}"
+        query: "{{ query|escapejs }}",
+        category: "{{ category|escapejs }}"
     };
 </script>
 

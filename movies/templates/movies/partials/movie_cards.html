@@ -1,9 +1,9 @@
 {% for movie in movies %}
-    <div class="movie-card" data-id="{{ movie.id }}">
+    <div class="movie-card" data-id="{{ movie.id }}" data-media-type="{{ movie.media_type }}">
         <img src="{{ movie.poster_url }}" alt="Affiche de {{ movie.title }}">
         <div class="movie-card-content">
             <h2>{{ movie.title }}</h2>
-            <p>Sortie : {{ movie.release_date }}</p>
+            <p>{% if movie.media_type == 'tv' %}📺 Série TV{% else %}🎬 Film{% endif %} - Sortie : {{ movie.release_date }}</p>
             <p class="short-overview">{{ movie.overview|truncatechars:100 }}</p>
         </div>
     </div>
