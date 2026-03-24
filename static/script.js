@@ -1,4 +1,37 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Mobile Menu Logic ---
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const navLinks = document.getElementById('nav-links');
+
+    if (mobileMenuToggle && navLinks) {
+        mobileMenuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            // Change icon from bars to times (X)
+            const icon = mobileMenuToggle.querySelector('i');
+            if (icon) {
+                if (navLinks.classList.contains('active')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            }
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (event) => {
+            if (!navLinks.contains(event.target) && !mobileMenuToggle.contains(event.target) && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                const icon = mobileMenuToggle.querySelector('i');
+                if (icon) {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            }
+        });
+    }
+
     // --- Element Selectors ---
     const moviesGrid = document.querySelector('.movies-grid');
     const infiniteScrollLoader = document.getElementById('infinite-scroll-loader');
@@ -196,15 +229,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 tvShowDetails.style.display = 'block';
                 loadSeasons(movie.id);
             }
-            // Fetch trailer for TV show just in case user wants to see it?
-            // Usually we might want a trailer button for TV shows too, 
-            // but the request was specifically about seasons/episodes.
-            // Let's keep the trailer button if possible, but move it.
-            // For now, based on instructions, we hide standard movie actions.
-            
-            // Re-enable trailer button if you want it visible above seasons
-            // But let's stick to the plan: hide movie-actions, show seasons.
-            
         } else {
             // Movie Logic
             if (tvShowDetails) tvShowDetails.style.display = 'none';

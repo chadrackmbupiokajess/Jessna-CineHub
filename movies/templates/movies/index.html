@@ -6,29 +6,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jessna CinéHub</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-<header>
+<header class="main-header">
     <div class="decorative-bubble bubble-1"></div>
     <div class="decorative-bubble bubble-2"></div>
 
-    <div class="header-content">
-        <nav class="main-nav">
-            <a href="{% url 'index' %}" class="nav-link active">Accueil</a>
-            <a href="{% url 'about' %}" class="nav-link">À propos</a>
-        </nav>
-        <h1>Jessna CinéHub</h1>
-        <form method="get" action="{% url 'index' %}">
-            <input type="text" name="query" placeholder="Rechercher un film ou une série..." value="{{ query }}">
-            <input type="hidden" name="category" value="{{ category }}">
-            <button type="submit">Rechercher</button>
-        </form>
+    <div class="header-container">
+        <!-- Top Bar: Logo, Mobile Toggle, Search -->
+        <div class="navbar">
+            <div class="logo-container">
+                <a href="{% url 'index' %}" class="logo-text">
+                    <i class="fas fa-film"></i> Jessna<span>CinéHub</span>
+                </a>
+            </div>
 
-        <div class="category-nav">
-            <a href="{% url 'index' %}?category=all" class="category-link {% if category == 'all' or not category %}active{% endif %}">Tout</a>
-            <a href="{% url 'index' %}?category=movie" class="category-link {% if category == 'movie' %}active{% endif %}">Films</a>
-            <a href="{% url 'index' %}?category=tv" class="category-link {% if category == 'tv' %}active{% endif %}">Séries</a>
+            <!-- Hamburger Button (Mobile Only) -->
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <!-- Navigation Links (Hidden on mobile initially) -->
+            <nav class="nav-links" id="nav-links">
+                <a href="{% url 'index' %}" class="nav-link {% if request.path == '/' %}active{% endif %}">
+                    <i class="fas fa-home"></i> Accueil
+                </a>
+                <a href="{% url 'about' %}" class="nav-link {% if 'about' in request.path %}active{% endif %}">
+                    <i class="fas fa-info-circle"></i> À propos
+                </a>
+            </nav>
+
+            <!-- Search Bar (Desktop) -->
+            <div class="search-container desktop-search">
+                <form method="get" action="{% url 'index' %}">
+                    <input type="text" name="query" placeholder="Rechercher..." value="{{ query }}">
+                    <input type="hidden" name="category" value="{{ category }}">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Mobile Search (Visible only on mobile below navbar) -->
+        <div class="search-container mobile-search">
+            <form method="get" action="{% url 'index' %}">
+                <input type="text" name="query" placeholder="Rechercher un film ou une série..." value="{{ query }}">
+                <input type="hidden" name="category" value="{{ category }}">
+                <button type="submit"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="category-tabs">
+            <a href="{% url 'index' %}?category=all" class="tab-link {% if category == 'all' or not category %}active{% endif %}">
+                <i class="fas fa-globe"></i> Tout
+            </a>
+            <a href="{% url 'index' %}?category=movie" class="tab-link {% if category == 'movie' %}active{% endif %}">
+                <i class="fas fa-ticket-alt"></i> Films
+            </a>
+            <a href="{% url 'index' %}?category=tv" class="tab-link {% if category == 'tv' %}active{% endif %}">
+                <i class="fas fa-tv"></i> Séries
+            </a>
         </div>
     </div>
 </header>
