@@ -358,11 +358,11 @@ header button:hover {
 .video-container {
     position: relative;
     width: 100%;
-    max-width: 1280px;
+    max-width: 1000px; /* Reduced max-width for PC */
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-height: 90vh;
+    max-height: 85vh; /* Reduced max-height */
     padding: 0;
 }
 
@@ -445,6 +445,11 @@ header button:hover {
     }
     #overlay-title {
         font-size: 1.8rem;
+    }
+    
+    /* Reset max-width for tablets to use more screen space */
+    .video-container {
+        max-width: 95vw;
     }
 }
 
