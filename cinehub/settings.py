@@ -32,7 +32,7 @@ PEXELS_API_KEY = "FtG3PNrHPffPBq4jUdee5qGBl1jK9NfgNqxO1LT7srULdsiqnQTi5MV2"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.193', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['192.168.54.110', '127.0.0.1', 'localhost']
 
 
 # Application definition

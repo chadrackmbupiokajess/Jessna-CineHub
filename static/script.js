@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let allMovies = moviesDataElement ? JSON.parse(moviesDataElement.textContent) : [];
     let currentTrailerUrls = null;
     let currentMovieId = null;
-    
+
     // --- State ---
     let currentPage = window.paginationData.currentPage;
     const totalPages = window.paginationData.totalPages;
@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (overlayTitle) overlayTitle.textContent = movie.title;
         if (overlayOverview) overlayOverview.textContent = movie.overview;
         if (overlayPoster) overlayPoster.src = movie.poster_url;
-        
+
         movieOverlay.style.display = 'flex';
         document.body.style.overflow = 'hidden';
 
@@ -137,12 +137,12 @@ document.addEventListener('DOMContentLoaded', () => {
             overlayTrailerBtn.disabled = true;
             overlayTrailerBtn.classList.add('is-loading');
         }
-        
+
         if (overlayWatchBtn) {
             overlayWatchBtn.textContent = 'Chargement...';
             overlayWatchBtn.disabled = true;
         }
-        
+
         currentTrailerUrls = null;
 
         try {
@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) {
              trailerIframe.src = embedUrl;
         }
-        
+
         if (youtubeWatchBtn) {
             if (isYoutube && watchUrl) {
                 youtubeWatchBtn.href = watchUrl;
