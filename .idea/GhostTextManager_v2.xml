@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GhostTextManager">
+    <option name="inputs">
+      <map>
+        <entry key="dans mon projet le film est toujour en anglais peu qui sont en francais regarde le code que j'ai vu dans moviebox tu peux avoir une idée de quel fonctionnalité qu'ils ont utiliser pour avoir plus de films ou series en francais">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1774393152356" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="j'avais deja essayer c'etait oujours en anglais">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1774394843809" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="mais l'audio de film o series sont toujours en anglais">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1774394744286" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="oui essayons avant de commencer regarde ce que j'ai vu dans moviebox &#10;&#10;&#10;&lt;!doctype html&gt;&#10;&lt;html lang=&quot;en&quot;&gt;&#10;    &lt;head&gt;&#10;        &lt;meta charset=&quot;UTF-8&quot; /&gt;&#10;        &lt;link&#10;            rel=&quot;icon&quot;&#10;            href=&quot;https://h5-static.aoneroom.com/spa/videoPlayPage/favicon.ico&quot; /&gt;&#10;        &lt;meta&#10;            http-equiv=&quot;Pragma&quot;&#10;            content=&quot;no-cache&quot; /&gt;&#10;        &lt;meta&#10;            http-equiv=&quot;Expires&quot;&#10;            content=&quot;0&quot; /&gt;&#10;        &lt;meta&#10;            http-equiv=&quot;Cache-Control&quot;&#10;            content=&quot;must-revalidate&quot; /&gt;&#10;        &lt;meta&#10;            name=&quot;viewport&quot;&#10;            content=&quot;width=device-width, initial-scale=1.0,user-scalable=no&quot; /&gt;&#10;        &lt;meta /&gt;&#10;        &lt;meta&#10;            name=&quot;referrer&quot;&#10;            content=&quot;no-referrer-when-downgrade&quot; /&gt;&#10;        &lt;title&gt;Free Movies&lt;/title&gt;&#10;        &lt;script&gt;&#10;            if (/(localhost|10\.|h5-test)/i.test(location.origin)) {&#10;                window.ENV = 'test';&#10;            } else {&#10;                window.ENV = 'prod';&#10;            }&#10;&#10;            function onResumeWebView() {}&#10;            (function (win, doc, sc, url, evt, elem, dd) {&#10;                win.sendTrackerName = evt;&#10;                win[evt] =&#10;                    win[evt] ||&#10;                    function () {&#10;                        (win[evt].queue = win[evt].queue || []).push(arguments);&#10;                    };&#10;                win[evt].start = +new Date();&#10;                win['ath_elpv'] =&#10;                    win['ath_elpv'] ||&#10;                    function () {&#10;                        (win['ath_elpv'].queue = win['ath_elpv'].queue || []).push(arguments);&#10;                    };&#10;                elem = doc.createElement(sc);&#10;                dd = doc.getElementsByTagName(sc)[0];&#10;                elem.async = 1;&#10;                elem.src = url;&#10;                (doc.body || doc.documentElement).appendChild(elem);&#10;            })(window, document, 'script', 'https://h5-static.aoneroom.com/sdk/athena-unify.js', 'ath_send');&#10;&#10;            window.etm_setting = {&#10;                openEtm: 'open',&#10;                appid: 2570,&#10;                app_vn: '1.0.0',&#10;                env: window.ENV,&#10;                comParam: {&#10;                    os: /iphone|ipad|ipod|macintosh/.test(navigator.userAgent.toLowerCase()) ? 'apple' : 'android',&#10;                    projectId: 'spa-mb-videoplay'&#10;                },&#10;                loc: 'ali-eur',&#10;                web_click: 'close',&#10;                web_leave: 'close',&#10;                web_stay: 'close',&#10;                js_bridge: true&#10;            };&#10;        &lt;/script&gt;&#10;      &lt;script type=&quot;module&quot; crossorigin src=&quot;https://h5-static.aoneroom.com/spa/videoPlayPage/assets/index.f9ce42ed.js&quot;&gt;&lt;/script&gt;&#10;      &lt;link rel=&quot;stylesheet&quot; href=&quot;https://h5-static.aoneroom.com/spa/videoPlayPage/assets/index.8a899ae7.css&quot;&gt;&#10;    &lt;/head&gt;&#10;&#10;    &lt;body style=&quot;margin: 0 auto&quot;&gt;&#10;        &lt;div id=&quot;app&quot;&gt;&lt;/div&gt;&#10;        &#10;    &lt;/body&gt;&#10;&lt;/html&gt;&#10;&#10;&#10;il utilse quel technologie pour recuperer tles multilangue?">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1774393519930" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="oui oui">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1774393909896" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="oui si je veux voir tous les films implemente ca dit moi d'abord je verrai plus de films?">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1774393347793" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="salut">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1774393034331" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
