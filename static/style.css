@@ -63,14 +63,16 @@ body {
     text-decoration: none;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.8rem;
+}
+
+.logo-img {
+    height: 40px; /* Ajuste la taille selon tes besoins */
+    width: auto;
+    object-fit: contain;
 }
 
 .logo-text span {
-    color: var(--accent-color);
-}
-
-.logo-text i {
     color: var(--accent-color);
 }
 
