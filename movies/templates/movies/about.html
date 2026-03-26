@@ -19,7 +19,7 @@
         <!-- Top Bar: Logo, Mobile Toggle, Nav -->
         <div class="navbar">
             <div class="logo-container">
-                <a href="{% url 'index' %}" class="logo-text">
+                <a href="#" class="logo-text" id="logo-trigger">
                     <img src="{% static 'logo Jess CinéHub.png' %}" alt="Logo" class="logo-img">
                     Jessna<span>CinéHub</span>
                 </a>
@@ -79,6 +79,17 @@
         <p>En qualité de représentant légal de Jessna TechLearn.</p>
     </section>
 </main>
+
+<!-- Logo Overlay (Smaller Version) -->
+<div id="logo-overlay" class="overlay">
+    <div class="overlay-content" style="flex-direction: column; align-items: center; text-align: center; max-width: 400px; padding: 1.5rem;">
+        <span class="close-overlay" role="button" aria-label="Fermer" data-close="logo-overlay" style="font-size: 1.8rem;">&times;</span>
+        <img src="{% static 'logo Jess CinéHub.png' %}" alt="Logo" style="max-width: 150px; height: auto; border-radius: 8px; margin-bottom: 1rem;">
+        <h2 style="color: var(--accent-color); font-size: 1.5rem; margin-bottom: 0.5rem;">Jessna CinéHub</h2>
+        <p style="font-size: 0.9rem; color: rgba(255,255,255,0.8);">Votre plateforme préférée de streaming.</p>
+        <button class="quit-btn" data-close="logo-overlay" style="margin-top: 1rem; padding: 0.5rem 1.2rem; font-size: 0.9rem;">Fermer</button>
+    </div>
+</div>
 
 <script src="{% static 'script.js' %}"></script>
 </body>

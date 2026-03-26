@@ -50,6 +50,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const overlayTrailerBtn = document.getElementById('overlay-trailer-btn');
     const overlayWatchBtn = document.getElementById('overlay-watch-btn');
 
+    // Logo Overlay
+    const logoOverlay = document.getElementById('logo-overlay');
+    const logoTrigger = document.getElementById('logo-trigger');
+
     // TV Show Specific Elements
     const tvShowDetails = document.getElementById('tv-show-details');
     const seasonSelect = document.getElementById('season-select');
@@ -75,6 +79,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let isLoading = false;
 
     // --- Event Listeners ---
+
+    // Logo click logic
+    if (logoTrigger && logoOverlay) {
+        logoTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            logoOverlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        });
+    }
 
     if (moviesGrid) {
         moviesGrid.addEventListener('click', (event) => {
@@ -136,7 +149,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const targetOverlay = document.getElementById(targetId);
             if(targetOverlay) {
                 if(targetId === 'trailer-overlay') closeTrailerOverlay();
-                else closeMovieOverlay();
+                else {
+                    targetOverlay.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
             }
         });
     });
@@ -156,12 +172,20 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('click', (event) => {
         if (event.target === movieOverlay) closeMovieOverlay();
         if (event.target === trailerOverlay) closeTrailerOverlay();
+        if (event.target === logoOverlay) {
+            logoOverlay.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
     });
 
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
             if (trailerOverlay && trailerOverlay.style.display === 'flex') closeTrailerOverlay();
             else if (movieOverlay && movieOverlay.style.display === 'flex') closeMovieOverlay();
+            else if (logoOverlay && logoOverlay.style.display === 'flex') {
+                logoOverlay.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
         }
     });
 
