@@ -35,6 +35,9 @@
                 <a href="{% url 'index' %}" class="nav-link">
                     <i class="fas fa-home"></i> Accueil
                 </a>
+                <a href="{% url 'live_sports' %}" class="nav-link {% if 'live-sports' in request.path %}active{% endif %}">
+                    <i class="fas fa-satellite-dish"></i> Direct Sport
+                </a>
                 <a href="{% url 'about' %}" class="nav-link active">
                     <i class="fas fa-info-circle"></i> À propos
                 </a>

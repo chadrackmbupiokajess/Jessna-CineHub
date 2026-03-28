@@ -1,0 +1,113 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct Sport - Jessna CinéHub</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+<header class="main-header">
+    <div class="decorative-bubble bubble-1"></div>
+    <div class="decorative-bubble bubble-2"></div>
+
+    <div class="header-container">
+        <div class="navbar">
+            <div class="logo-container">
+                <a href="#" class="logo-text" id="logo-trigger">
+                    <img src="{% static 'logo Jess CinéHub.png' %}" alt="Logo" class="logo-img">
+                    Jessna<span>CinéHub</span>
+                </a>
+            </div>
+
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <nav class="nav-links" id="nav-links">
+                <a href="{% url 'index' %}" class="nav-link">
+                    <i class="fas fa-home"></i> Accueil
+                </a>
+                <a href="{% url 'live_sports' %}" class="nav-link active">
+                    <i class="fas fa-satellite-dish"></i> Direct Sport
+                </a>
+                <a href="{% url 'about' %}" class="nav-link">
+                    <i class="fas fa-info-circle"></i> À propos
+                </a>
+            </nav>
+        </div>
+    </div>
+</header>
+
+<main class="about-page-content" style="margin-top: 2rem; max-width: 1000px;">
+    <section class="about-section" style="text-align: center;">
+        <h2 style="color: var(--accent-color);">🏆 Matchs en Direct</h2>
+        <p>Suivez vos événements sportifs préférés en temps réel sur Jessna CinéHub.</p>
+    </section>
+
+    <!-- Grid de matchs (Exemple) -->
+    <div class="movies-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; padding: 1rem 0;">
+
+        <!-- Match 1 -->
+        <div class="movie-card" style="cursor: default;">
+            <div style="background: #000; height: 180px; display: flex; align-items: center; justify-content: center; position: relative;">
+                <i class="fas fa-futbol" style="font-size: 4rem; color: rgba(255,255,255,0.1);"></i>
+                <div style="position: absolute; top: 10px; left: 10px; background: red; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; animation: pulse 1.5s infinite;">
+                    LIVE
+                </div>
+            </div>
+            <div class="movie-card-content">
+                <h3>Ligue des Champions</h3>
+                <p>Real Madrid vs Manchester City</p>
+                <button class="watch-btn" style="width: 100%; margin-top: 1rem;" onclick="alert('Lien de streaming à configurer ici')">Regarder maintenant</button>
+            </div>
+        </div>
+
+        <!-- Match 2 -->
+        <div class="movie-card" style="cursor: default;">
+            <div style="background: #000; height: 180px; display: flex; align-items: center; justify-content: center; position: relative;">
+                <i class="fas fa-basketball-ball" style="font-size: 4rem; color: rgba(255,255,255,0.1);"></i>
+                <div style="position: absolute; top: 10px; left: 10px; background: #555; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold;">
+                    À VENIR (21:00)
+                </div>
+            </div>
+            <div class="movie-card-content">
+                <h3>NBA Regular Season</h3>
+                <p>Lakers vs Warriors</p>
+                <button class="trailer-btn" style="width: 100%; margin-top: 1rem;" disabled>Bientôt disponible</button>
+            </div>
+        </div>
+
+    </div>
+
+    <section class="about-section" style="margin-top: 2rem; background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 12px;">
+        <h3>Note de service</h3>
+        <p>Les flux en direct sont mis à jour quotidiennement. Si un lien ne fonctionne pas, veuillez rafraîchir la page ou réessayer plus tard.</p>
+    </section>
+</main>
+
+<!-- Logo Overlay (Identique aux autres pages) -->
+<div id="logo-overlay" class="overlay">
+    <div class="overlay-content" style="flex-direction: column; align-items: center; text-align: center; max-width: 400px; padding: 1.5rem;">
+        <span class="close-overlay" role="button" aria-label="Fermer" data-close="logo-overlay" style="font-size: 1.8rem;">&times;</span>
+        <img src="{% static 'logo Jess CinéHub.png' %}" alt="Logo" style="max-width: 150px; height: auto; border-radius: 8px; margin-bottom: 1rem;">
+        <h2 style="color: var(--accent-color); font-size: 1.5rem; margin-bottom: 0.5rem;">Jessna CinéHub</h2>
+        <p style="font-size: 0.9rem; color: rgba(255,255,255,0.8);">Votre plateforme préférée de streaming.</p>
+        <button class="quit-btn" data-close="logo-overlay" style="margin-top: 1rem; padding: 0.5rem 1.2rem; font-size: 0.9rem;">Fermer</button>
+    </div>
+</div>
+
+<style>
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+</style>
+
+<script src="{% static 'script.js' %}"></script>
+</body>
+</html>

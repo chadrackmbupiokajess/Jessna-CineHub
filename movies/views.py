@@ -32,6 +32,12 @@ def index(request):
     }
     return render(request, "movies/index.html", context)
 
+def live_sports(request):
+    """
+    Displays the live sports streaming page.
+    """
+    return render(request, "movies/live_sports.html")
+
 def load_more_movies(request):
     """
     API endpoint for infinite scroll. 
